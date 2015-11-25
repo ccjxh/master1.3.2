@@ -8,12 +8,11 @@
 
 #import <UIKit/UIKit.h>
 //type 表示类型   1是新增  2删除  
-typedef void(^managerPhotos) (NSInteger type,id object,NSMutableArray*array);
+typedef void(^managerPhotos) (NSInteger type,id object);
 @interface TableViewCell : UITableViewCell
 @property(nonatomic)BOOL isShow;
 @property(nonatomic,copy)managerPhotos block;
 @property(nonatomic)NSMutableArray*picArray;
 @property(nonatomic)UIImage*currentImage;
-@property(nonatomic)NSMutableArray*ModelArray;//要删除的数组
 -(void)reloadData;
 @end

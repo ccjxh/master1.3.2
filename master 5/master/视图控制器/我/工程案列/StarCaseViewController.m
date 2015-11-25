@@ -62,7 +62,6 @@
 -(void)setEditable:(BOOL)Editable{
     _Editable=Editable;
     if (Editable==NO) {
-        self.tableview.userInteractionEnabled=NO;
         [registerButton setTitle:@"审核中" forState:UIControlStateNormal];
         [registerButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
         registerButton.userInteractionEnabled=NO;
@@ -70,7 +69,6 @@
         
     }else{
     
-        self.tableview.userInteractionEnabled=YES;
         [registerButton setTitle:@"提交审核" forState:UIControlStateNormal];
         [registerButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         registerButton.userInteractionEnabled=YES;
@@ -169,7 +167,11 @@
     example.firstLabel.text=[NSString stringWithFormat:@"%@\n%@",@"本人",@"现场施工照"];
     self.view.backgroundColor=COLOR(235, 235, 235, 1);
     self.tableview.backgroundColor=COLOR(235, 235, 235, 1);
+    if (self.model.applyFlg==2) {
+        self.tableview.tableFooterView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 20)];
+    }else{
     self.tableview.tableFooterView=example;
+    }
     registerButton.layer.cornerRadius=10;
     registerButton.backgroundColor=COLOR(21, 168, 235, 1);
     [registerButton addTarget:self action:@selector(ligin) forControlEvents:UIControlEventTouchUpInside];
@@ -279,38 +281,35 @@
     
     switch (indexPath.row) {
         case 0:
-        {
-            if ([_subDict objectForKey:@"caseName"]) {
-                
-                return   [self accountStringHeightFromString:[_subDict objectForKey:@"caseName"] Width:SCREEN_WIDTH-110 FrontSize:15]+16>44? [self accountStringHeightFromString:[_subDict objectForKey:@"caseName"] Width:SCREEN_WIDTH-110 FrontSize:15]+16:44;
-            }
+            return 40;
             break;
         case 1:
             {
                 if ([_subDict objectForKey:@"introduce"]) {
                     
+                      NSLog(@"%lf", [self accountStringHeightFromString:[_subDict objectForKey:@"introduce"] Width:SCREEN_WIDTH-110 FrontSize:15]+16);
                     return   [self accountStringHeightFromString:[_subDict objectForKey:@"introduce"] Width:SCREEN_WIDTH-110 FrontSize:15]+16>44?[self accountStringHeightFromString:[_subDict objectForKey:@"introduce"] Width:SCREEN_WIDTH-110 FrontSize:15]+16:44;
+                   
                 }
                 
             }
             
             break;
-            
-        }
-            break;
-            
         default:
             break;
-    }
+        }
     return 44;
 }
 
 
 
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
     MyStartContentTableViewCell*cell=[tableView dequeueReusableCellWithIdentifier:@"MyStartContentTableViewCell"];
     if (!cell) {
-        cell=[[[NSBundle mainBundle]loadNibNamed:@"MyStartContentTableViewCell" owner:nil options:nil]lastObject];
+        UINib*nib=[UINib nibWithNibName:@"MyStartContentTableViewCell" bundle:[NSBundle mainBundle]];
+        [self.tableview registerNib:nib forCellReuseIdentifier:@"MyStartContentTableViewCell"];
+        cell=[tableView dequeueReusableCellWithIdentifier:@"MyStartContentTableViewCell"];
     }
 
     cell.selectionStyle=0;
@@ -321,6 +320,9 @@
         cell.tx.placeholder=_valueArray[indexPath.row];
         if ([_subDict objectForKey:@"caseName"]) {
             cell.tx.text=[_subDict objectForKey:@"caseName"];
+        }
+        if (self.Editable==NO) {
+            cell.userInteractionEnabled=NO;
         }
             return cell;
     }
@@ -333,12 +335,19 @@
         if ([_subDict objectForKey:@"introduce"]) {
             cell.tx.text=[_subDict objectForKey:@"introduce"];
         }
+        if (self.Editable==NO) {
+            cell.userInteractionEnabled=NO;
+        }
         return cell;
     }
     StarPhotosTableViewCell*Cell=[tableView dequeueReusableCellWithIdentifier:@"StarPhotosTableViewCell"];
     if (!Cell) {
-        Cell=[[[NSBundle mainBundle]loadNibNamed:@"StarPhotosTableViewCell" owner:nil options:nil]lastObject];
+        UINib*nib=[UINib nibWithNibName:@"StarPhotosTableViewCell" bundle:[NSBundle mainBundle]];
+        [self.tableview registerNib:nib forCellReuseIdentifier:@"StarPhotosTableViewCell"];
+        Cell=[tableView dequeueReusableCellWithIdentifier:@"StarPhotosTableViewCell"];
     }
+    
+    
     Cell.selectionStyle=0;
     for (NSInteger i=0; i<3; i++) {
         if (![_picDict objectForKey:[NSString stringWithFormat:@"image%d",i]]) {
@@ -415,8 +424,18 @@
 
 
 -(void)postfirst{
-
     _index=0;
+    if (self.Editable==NO) {
+    NSIndexPath*indexPath=[NSIndexPath indexPathForRow:_index inSection:0];
+    StarPhotosTableViewCell*cell=[self.tableview cellForRowAtIndexPath:indexPath];
+    NSMutableArray*array=[[NSMutableArray alloc]init];
+    [array addObject:[_picDict objectForKey:@"url0"]];
+    [array addObject:[_picDict objectForKey:@"url1"]];
+    [array addObject:[_picDict objectForKey:@"url2"]];
+        UIImageView*imagevie=[[UIImageView alloc]init];
+    [self displayPhotosWithIndex:_index Tilte:self.model.caseName describe:self.model.introduce ShowViewcontroller:self UrlSarray:array ImageView:imagevie];
+        return;
+    }
      [[PhotoManager share]getimageFromPhotosWithNavigation:self.navigationController];
     [PhotoManager share].delegate=self;
     
@@ -427,6 +446,17 @@
 
 -(void)postsecond{
     _index=1;
+    if (self.Editable==NO) {
+        NSIndexPath*indexPath=[NSIndexPath indexPathForRow:_index inSection:0];
+        StarPhotosTableViewCell*cell=[self.tableview cellForRowAtIndexPath:indexPath];
+        NSMutableArray*array=[[NSMutableArray alloc]init];
+        [array addObject:[_picDict objectForKey:@"url0"]];
+        [array addObject:[_picDict objectForKey:@"url1"]];
+        [array addObject:[_picDict objectForKey:@"url2"]];
+        UIImageView*imageview=[[UIImageView alloc]init];
+        [self displayPhotosWithIndex:_index Tilte:self.model.caseName describe:self.model.introduce ShowViewcontroller:self UrlSarray:array ImageView:imageview];
+        return;
+    }
     [[PhotoManager share]getimageFromPhotosWithNavigation:self.navigationController];
     [PhotoManager share].delegate=self;
 
@@ -436,6 +466,18 @@
 -(void)postThird{
     
     _index=2;
+    if (self.Editable==NO) {
+        NSIndexPath*indexPath=[NSIndexPath indexPathForRow:_index inSection:0];
+        StarPhotosTableViewCell*cell=[self.tableview cellForRowAtIndexPath:indexPath];
+        NSMutableArray*array=[[NSMutableArray alloc]init];
+        [array addObject:[_picDict objectForKey:@"url0"]];
+        [array addObject:[_picDict objectForKey:@"url1"]];
+        [array addObject:[_picDict objectForKey:@"url2"]];
+        UIImageView*imageview=[[UIImageView alloc]init];
+
+        [self displayPhotosWithIndex:_index Tilte:self.model.caseName describe:self.model.introduce ShowViewcontroller:self UrlSarray:array ImageView:imageview];
+        return;
+    }
     [[PhotoManager share]getimageFromPhotosWithNavigation:self.navigationController];
     [PhotoManager share].delegate=self;
 

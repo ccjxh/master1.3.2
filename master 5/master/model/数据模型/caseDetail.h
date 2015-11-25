@@ -14,5 +14,6 @@
 @property(nonatomic)NSString*resource;
 @property(nonatomic)NSString*category;
 @property(nonatomic)NSInteger workId;
+@property(nonatomic)BOOL isDelete;//是否被删除
 
 @end

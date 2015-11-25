@@ -118,32 +118,32 @@
     __weak typeof(MasterDetailModel*)weakModel=masterDetailModel;
     inforView.tableDisSelected=^(NSIndexPath*index,personDetailViewModel*tempModel){
         if (_dataType.count==3) {
-            if (index.section==1&&index.row==1) {
-                NSMutableString * str=[[NSMutableString alloc] initWithFormat:@"telprompt://%@",tempModel.mobile];
-                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
-                AppDelegate*delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
-                NSString*urlString=[weSelf interfaceFromString:interface_phonerecommend];
-                NSMutableDictionary*dict=[[NSMutableDictionary alloc]init];
-                [dict setObject: [NSString stringWithFormat:@"%u",delegate.id] forKey:@"fromId"];
-                [dict setObject:[NSString stringWithFormat:@"%lu",weakModel.id] forKey:@"targetId"];
-                [dict setObject:tempModel.mobile forKey:@"targetMobile"];
-                if (weakModel.realName) {
-                    [dict setObject:weakModel.realName forKey:@"targetRealName"];
-                }
-                [dict setObject:@"user" forKey:@"callType"];
-                [dict setObject:[NSString stringWithFormat:@"%u",delegate.id] forKey:@"workId"];
-                NSDate*Date=[NSDate date];
-                NSDateFormatter*formatter=[[NSDateFormatter alloc]init];
-                [formatter setDateFormat:@"yyyy/MM/dd HH:mm:ss"];
-                NSString*tiem=[formatter stringFromDate:Date];
-                [dict setObject:tiem forKey:@"created"];
-                [[httpManager share]POST:urlString parameters:dict success:^(AFHTTPRequestOperation *Operation, id responseObject) {
-                    NSDictionary*dict=(NSDictionary*)responseObject;
-                    
-                } failure:^(AFHTTPRequestOperation *Operation, NSError *error) {
-                    
-                }];
-            }
+//            if (index.section==1&&index.row==1) {
+//                NSMutableString * str=[[NSMutableString alloc] initWithFormat:@"telprompt://%@",tempModel.mobile];
+//                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
+//                AppDelegate*delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+//                NSString*urlString=[weSelf interfaceFromString:interface_phonerecommend];
+//                NSMutableDictionary*dict=[[NSMutableDictionary alloc]init];
+//                [dict setObject: [NSString stringWithFormat:@"%u",delegate.id] forKey:@"fromId"];
+//                [dict setObject:[NSString stringWithFormat:@"%lu",weakModel.id] forKey:@"targetId"];
+//                [dict setObject:tempModel.mobile forKey:@"targetMobile"];
+//                if (weakModel.realName) {
+//                    [dict setObject:weakModel.realName forKey:@"targetRealName"];
+//                }
+//                [dict setObject:@"user" forKey:@"callType"];
+//                [dict setObject:[NSString stringWithFormat:@"%u",delegate.id] forKey:@"workId"];
+//                NSDate*Date=[NSDate date];
+//                NSDateFormatter*formatter=[[NSDateFormatter alloc]init];
+//                [formatter setDateFormat:@"yyyy/MM/dd HH:mm:ss"];
+//                NSString*tiem=[formatter stringFromDate:Date];
+//                [dict setObject:tiem forKey:@"created"];
+//                [[httpManager share]POST:urlString parameters:dict success:^(AFHTTPRequestOperation *Operation, id responseObject) {
+//                    NSDictionary*dict=(NSDictionary*)responseObject;
+//                    
+//                } failure:^(AFHTTPRequestOperation *Operation, NSError *error) {
+//                    
+//                }];
+//            }
             
         }else if (_dataType.count==4){
             if (index.section==2&&index.row==1) {

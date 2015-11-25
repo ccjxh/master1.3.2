@@ -52,11 +52,11 @@
                 </subviews>
                 <animations/>
                 <constraints>
-                    <constraint firstItem="7AF-LH-kBa" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="11" id="9nl-qV-ZQ7"/>
+                    <constraint firstItem="7AF-LH-kBa" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="7" id="9nl-qV-ZQ7"/>
                     <constraint firstItem="TfZ-Jj-LLE" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="13" id="Iiu-ps-pe1"/>
-                    <constraint firstItem="hiO-yL-Z6L" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="11" id="JWV-eE-MlI"/>
+                    <constraint firstItem="hiO-yL-Z6L" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="7" id="JWV-eE-MlI"/>
                     <constraint firstItem="7AF-LH-kBa" firstAttribute="leading" secondItem="TfZ-Jj-LLE" secondAttribute="trailing" constant="10" id="bBe-C4-m17"/>
-                    <constraint firstItem="TfZ-Jj-LLE" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="drg-uG-eoU"/>
+                    <constraint firstItem="TfZ-Jj-LLE" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="drg-uG-eoU"/>
                     <constraint firstItem="hiO-yL-Z6L" firstAttribute="leading" secondItem="7AF-LH-kBa" secondAttribute="trailing" constant="10" id="fXv-zU-RNu"/>
                 </constraints>
             </tableViewCellContentView>

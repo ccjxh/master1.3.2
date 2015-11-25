@@ -255,8 +255,11 @@
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     starTableViewCell*cell=[tableView dequeueReusableCellWithIdentifier:@"Cell"];
     if (!cell) {
-        cell=[[[NSBundle mainBundle]loadNibNamed:@"starTableViewCell" owner:nil options:nil]lastObject];
+        UINib*nib=[UINib nibWithNibName:@"starTableViewCell" bundle:[NSBundle mainBundle]];
+        [self.tableview registerNib:nib forCellReuseIdentifier:@"Cell"];
+
     }
+    cell=[tableView dequeueReusableCellWithIdentifier:@"Cell"];
     starCaseModel*model=_dataArray[indexPath.row];
     switch (model.applyFlg) {
         case 1:
@@ -275,7 +278,6 @@
             break;
             case 3 :
         {
-        
             cell.statusLabel.text=@"不审核";
             cell.statusLabel.textColor=[UIColor redColor];
         }

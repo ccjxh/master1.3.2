@@ -72,15 +72,14 @@
 -(void)postData{
 
     [self flowShow];
-    NSMutableArray*valueArray=[self returnArrayWithNewData];
     for (NSInteger i=0; i<self.selectArray.count; i++) {
-        NSArray*array=self.selectArray[i];
-        AreaModel*proviceModel=array[0];
-        if (proviceModel.id==self.model.id) {
-            [self.selectArray removeObject:array];
+        NSArray*tempArray=self.selectArray[i];
+        AreaModel*provinceModel=tempArray[0];
+        if (provinceModel.id==self.model.id||provinceModel.id==4) {
+            [self.selectArray removeObjectAtIndex:i];
         }
     }
-    
+    NSMutableArray*valueArray=[self returnArrayWithNewData];
     if (valueArray.count>1) {
      [self.selectArray addObject:valueArray];
     }
@@ -113,17 +112,7 @@
                 
                 for (UIViewController*vc in self.navigationController.viewControllers) {
                       if ([vc isKindOfClass:[proviceSelectedViewController class]]==YES) {
-                          for (NSInteger i=0; i<self.selectArray.count; i++) {
-                              NSMutableArray*array=self.selectArray[i];
-                              for (NSInteger j=0; j<array.count; j++) {
-                                  AreaModel*model=array[j];
-                                  model.isselect=NO;
-                                  [array replaceObjectAtIndex:j withObject:model];
-                              }
-                              
-                              [self.selectArray replaceObjectAtIndex:i withObject:array];
-                          }
-                          proviceSelectedViewController*pvc=(proviceSelectedViewController*)vc;
+                        proviceSelectedViewController*pvc=(proviceSelectedViewController*)vc;
                           pvc.selectArray=self.selectArray;
                           [pvc.tableview reloadData];
                         [self.navigationController popToViewController:vc animated:YES];
@@ -183,8 +172,6 @@
     if (indexPath.section==0) {
         
         if (indexPath.row==0) {
-        
-        
         for (NSInteger i=0; i<self.selectArray.count; i++) {
             NSArray*tempArray=self.selectArray[i];
             AreaModel*provinceModel=tempArray[0];
@@ -192,7 +179,6 @@
                 [self.selectArray removeObjectAtIndex:i];
             }
         }
-        
         
         NSMutableArray*allProvince=[[dataBase share]findCityInformationWithPid:self.model.id];
         NSMutableArray*newAddressArray=[[NSMutableArray alloc]init];
@@ -274,7 +260,7 @@
     }else{
     model.isselect=YES;
     }
-    [_dataArray replaceObjectAtIndex:indexPath.section-1 withObject:model];
+    [_dataArray replaceObjectAtIndex:indexPath.row withObject:model];
     NSIndexPath*path=[NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section];
     [self.tableview reloadRowsAtIndexPaths:@[path] withRowAnimation:UITableViewRowAnimationAutomatic];
 

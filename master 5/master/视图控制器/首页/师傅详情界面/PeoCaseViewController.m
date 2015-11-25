@@ -9,6 +9,7 @@
 #import "PeoCaseViewController.h"
 #import "projectCastDetailViewController.h"
 #import "starTableViewCell.h"
+#import "StarCaseViewController.h"
 @interface PeoCaseViewController ()
 {
     UITableView*_programeTableview;
@@ -117,6 +118,20 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     peojectCaseModel*model=_picArray[indexPath.row];
+    if (model.type==1) {
+    StarCaseViewController*svc=[[StarCaseViewController alloc]initWithNibName:@"StarCaseViewController" bundle:nil];
+    svc.model=model;
+    if (model.applyFlg==1||model.applyFlg==2) {
+        svc.Editable=NO;
+    }else{
+        svc.Editable=YES;
+    }
+    
+    [self pushWinthAnimation:self.navigationController Viewcontroller:svc];
+    return;
+
+    }
+    
     projectCastDetailViewController*pvc=[[projectCastDetailViewController alloc]initWithNibName:@"projectCastDetailViewController" bundle:nil];
     pvc.id=model.id;
     pvc.model=model;

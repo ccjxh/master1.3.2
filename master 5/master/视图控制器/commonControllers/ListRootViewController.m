@@ -635,9 +635,8 @@
         cell.selectionStyle=0;
         cell.model=model;
         [cell reloadData];
-         cell.isShow=YES;
+        cell.isShow=YES;
         return cell;
-        
     }
     listRootTableViewCell*cell=[tableView dequeueReusableCellWithIdentifier:@"Cell"];
     if (!cell) {

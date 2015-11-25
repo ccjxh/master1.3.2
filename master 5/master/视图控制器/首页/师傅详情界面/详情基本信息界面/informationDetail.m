@@ -25,7 +25,7 @@
         }
     }
     NSArray*array=@[@"专 业 技 能",@"服 务 介 绍"];
-    NSArray*array1=@[@"曾合作雇主",@"过 往 工 地",@"期 望 薪 资",@"日          程",@"电          话",@"社          交",@"证          书"];
+    NSArray*array1=@[@"曾合作雇主",@"过 往 工 地",@"期 望 薪 资",@"日          程",@"电          话",@"社            交",@"证          书"];
     [_nameArray addObject:@""];
     [_nameArray addObject:array];
     [_nameArray addObject:array1];
@@ -36,7 +36,7 @@
 -(void)setModel:(personDetailViewModel *)model{
 
     _model=model;
-    NSArray* array1=@[@"曾合作雇主",@"过 往 工 地",@"团队规模",@"期 望 薪 资",@"日          程",@"电          话",@"社          交",@"证          书"];
+    NSArray* array1=@[@"曾合作雇主",@"过 往 工 地",@"团 队 规 模",@"期 望 薪 资",@"日          程",@"电          话",@"社              交",@"证              书"];
     if (model.userPost==3) {
         [_nameArray replaceObjectAtIndex:_dataArray.count-1 withObject:array1];
     }
@@ -143,7 +143,7 @@
             if (self.model.userPost==3) {
                
                 if (indexPath.row==6) {
-                    return 53;
+                    return 25;
                 }
                 if (indexPath.row==7) {
                     return [self accountPictureFromArray:self.model.certificate];
@@ -152,7 +152,7 @@
                 
             }
             if (indexPath.row==5) {
-                return 53;
+                return 25;
             }
             if (indexPath.row==6) {
                 return [self accountPictureFromArray:self.model.certificate];
@@ -167,7 +167,7 @@
             if (self.model.userPost==3) {
                 
                 if (indexPath.row==6) {
-                    return 53;
+                    return 25;
                 }
                 if (indexPath.row==7) {
                     return [self accountPictureFromArray:self.model.certificate];
@@ -176,7 +176,7 @@
                 
             }
             if (indexPath.row==5) {
-                return 53;
+                return 25;
             }
             if (indexPath.row==6) {
                 return [self accountPictureFromArray:self.model.certificate];
@@ -186,8 +186,8 @@
     UITableViewCell *cell = [self tableView:tableView cellForRowAtIndexPath:indexPath];
 
     
-    if (cell.frame.size.height<=34) {
-        return 34;
+    if (cell.frame.size.height<=44) {
+        return 30;
     }
     return cell.frame.size.height;
 }
@@ -265,60 +265,81 @@
 
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
+    UITableViewCell*cell=[tableView dequeueReusableCellWithIdentifier:@"CELL"];
+    if (!cell) {
+        cell=[[UITableViewCell alloc]initWithStyle:0 reuseIdentifier:@"CELL"];
+    }
+    switch (indexPath.section) {
+        case 0:
+        {
+            static NSString*cellName=@"peopleDetailTableViewCell";
+            peopleDetailTableViewCell *cell1 = [tableView dequeueReusableCellWithIdentifier:cellName];
+            if (!cell1)
+            {
+                
+                UINib*nib=[UINib nibWithNibName:cellName bundle:[NSBundle mainBundle]];
+                [self.tableview registerNib:nib forCellReuseIdentifier:cellName];
+                cellName=@"peopleDetailTableViewCell";
+                peopleDetailTableViewCell *cell1 = [tableView dequeueReusableCellWithIdentifier:cellName];
+                
+            }
+            __weak typeof(peopleDetailTableViewCell*)weCell=cell1;
+            cell1.displayBlock=^(NSString*iconString){
+                
+                if (self.headImageBlock) {
+                    self.headImageBlock(iconString,weCell);
+                }
+                
+            };
+            cell1.selectionStyle = UITableViewCellSelectionStyleNone;
+            [requestModel isNullMasterDetail:self.model];
+            [cell1 upDateWithModel:self.model];
+            return cell1;
+        
+        }
+            break;
+            case 1:
+        {
+            if (_dataArray.count==4) {
+                return [self getCertainCellWithTableview:self.tableview];
+            
+            }
+            myServiceDetaiTableViewCell*Cell=[tableView dequeueReusableCellWithIdentifier:@"myServiceDetaiTableViewCell"];
+            if (!Cell) {
+                UINib*nib=[UINib nibWithNibName:@"myServiceDetaiTableViewCell" bundle:[NSBundle mainBundle]];
+                [self.tableview registerNib:nib forCellReuseIdentifier:@"myServiceDetaiTableViewCell"];
+            }
+                return  [self getAboutSkillCellWithIndexPath:indexPath];
+        }
+            break;
+            case 2:
+        {
+            if (self.dataArray.count==3) {
+                return [self getPrimaryWithIndexPath:indexPath];
+            }else{
+                
+                return [self getAboutSkillCellWithIndexPath:indexPath];
+            }
+
+        }
+            break;
+            case 3:
+        {
+        
+         return [self getPrimaryWithIndexPath:indexPath];
+        }
+            break;
+            
+        default:
+            break;
+    }
+    
     if (self.tableview.tableFooterView==nil&&_dataArray.count!=0) {
         [self getCheckCell:self.tableview];
     }
-    peopleDetailTableViewCell *cell1 = [tableView dequeueReusableCellWithIdentifier:@"peopleDetailTableViewCell"];
-    if (cell1 == nil)
-    {
-        cell1=[[[NSBundle mainBundle]loadNibNamed:@"peopleDetailTableViewCell" owner:nil options:nil]lastObject];
-        
-    }
     
-    __weak typeof(peopleDetailTableViewCell*)weCell=cell1;
-    cell1.displayBlock=^(NSString*iconString){
-        
-        if (self.headImageBlock) {
-            self.headImageBlock(iconString,weCell);
-        }
-        
-    };
-    cell1.selectionStyle = UITableViewCellSelectionStyleNone;
-    [requestModel isNullMasterDetail:self.model];
-    [cell1 upDateWithModel:self.model];
-    
-    myServiceDetaiTableViewCell*Cell=[tableView dequeueReusableCellWithIdentifier:@"myServiceDetaiTableViewCell"];
-    if (!Cell) {
-        Cell=[[[NSBundle mainBundle]loadNibNamed:@"myServiceDetaiTableViewCell" owner:nil options:nil]lastObject];
-    }
-
-    if (indexPath.section==0) {
-        return cell1;
-        
-    }else if (indexPath.section==1){
-        if (self.dataArray.count==4) {
-            
-            
-            return [self getCertainCellWithTableview:tableView];
-        }else if (self.dataArray.count==3){
-            return  [self getAboutSkillCellWithIndexPath:indexPath];
-        }
-    }else if (indexPath.section==2){
-        
-        if (self.dataArray.count==3) {
-            return [self getPrimaryWithIndexPath:indexPath];
-        }else{
-            
-            return [self getAboutSkillCellWithIndexPath:indexPath];
-            
-        }
-    }
-    if (indexPath.section==3) {
-        
-        return [self getPrimaryWithIndexPath:indexPath];
-        
-    }
-    return Cell;
+   
+    return cell;
 }
 
 
@@ -366,9 +387,13 @@
 
 -(UITableViewCell*)getPrimaryWithIndexPath:(NSIndexPath*)indexPath{
 
-    myServiceDetaiTableViewCell*Cell=[self.tableview dequeueReusableCellWithIdentifier:@"myServiceDetaiTableViewCell"];
+    
+    static NSString*cellName=@"myServiceDetaiTableViewCell";
+    myServiceDetaiTableViewCell*Cell=[self.tableview dequeueReusableCellWithIdentifier:cellName];
     if (!Cell) {
-        Cell=[[[NSBundle mainBundle]loadNibNamed:@"myServiceDetaiTableViewCell" owner:nil options:nil]lastObject];
+        UINib*nib=[UINib nibWithNibName:cellName bundle:[NSBundle mainBundle]];
+        [self.tableview registerNib:nib forCellReuseIdentifier:cellName];
+        Cell=[self.tableview dequeueReusableCellWithIdentifier:cellName];
     }
     Cell.selectionStyle=0;
     Cell.name.text=_nameArray[indexPath.section][indexPath.row];
@@ -436,25 +461,27 @@
         {
             if (self.model.userPost==3) {
                 
-                Cell.content.text=[self.model.service objectForKey:@"workStatus"];
+                if ([[[self.model.service objectForKey:@"payType"] objectForKey:@"name"] isEqualToString:@"面议"]==YES) {
+                    Cell.content.text=@"面议";
+                    Cell.content.textColor=[UIColor blackColor];
+                    return Cell;
+                    
+                }else if (![[self.model.service objectForKey:@"payType"] objectForKey:@"name"]){
+                    Cell.content.text=@"";
+                    return Cell;
+                }else {
+                    
+                    Cell.content.text=[NSString stringWithFormat:@"%.2f%@",[[self.model.service objectForKey:@"expectPay"] floatValue],[[self.model.service objectForKey:@"payType"] objectForKey:@"name"]];
+                    Cell.content.textColor=[UIColor blackColor];
+                    
+                }
+                
                 return Cell;
+
                 
             }
-            if ([[[self.model.service objectForKey:@"payType"] objectForKey:@"name"] isEqualToString:@"面议"]==YES) {
-                Cell.content.text=@"面议";
-                Cell.content.textColor=[UIColor blackColor];
-                return Cell;
-                
-            }else if (![[self.model.service objectForKey:@"payType"] objectForKey:@"name"]){
-                Cell.content.text=@"";
-                return Cell;
-            }else {
-                
-                Cell.content.text=[NSString stringWithFormat:@"%.2f%@",[[self.model.service objectForKey:@"expectPay"] floatValue],[[self.model.service objectForKey:@"payType"] objectForKey:@"name"]];
-                Cell.content.textColor=[UIColor blackColor];
-                
-            }
-            
+           
+            Cell.content.text=[self.model.service objectForKey:@"workStatus"];
             return Cell;
         }
             break;
@@ -462,11 +489,11 @@
         {
             if (self.model.userPost==3) {
                 
-                Cell.content.text=self.model.mobile;
+                Cell.content.text=[self.model.service objectForKey:@"workStatus"];
                 return Cell;
                 
             }
-            Cell.content.text=[self.model.service objectForKey:@"workStatus"];
+            Cell.content.text=self.model.mobile;
             return Cell;
         }
             break;
@@ -477,8 +504,11 @@
                 return Cell;
 
             }
+            
             CommituateTableViewCell*cell=[self.tableview dequeueReusableCellWithIdentifier:@"CommituateTableViewCell"];
             if (!cell) {
+                UINib*nib=[UINib nibWithNibName:@"CommituateTableViewCell" bundle:[NSBundle mainBundle]];
+                [self.tableview registerNib:nib forCellReuseIdentifier:@"CommituateTableViewCell"];
                 cell=[[[NSBundle mainBundle]loadNibNamed:@"CommituateTableViewCell" owner:nil options:nil] lastObject];
                 
             }
@@ -495,12 +525,15 @@
                 
                 CommituateTableViewCell*cell=[self.tableview dequeueReusableCellWithIdentifier:@"CommituateTableViewCell"];
                 if (!cell) {
+                    UINib*nib=[UINib nibWithNibName:@"CommituateTableViewCell" bundle:[NSBundle mainBundle]];
+                    [self.tableview registerNib:nib forCellReuseIdentifier:@"CommituateTableViewCell"];
                     cell=[[[NSBundle mainBundle]loadNibNamed:@"CommituateTableViewCell" owner:nil options:nil] lastObject];
+                    cell=[self.tableview dequeueReusableCellWithIdentifier:@"CommituateTableViewCell"];
                     
                 }
                 cell.model=self.model;
+                [cell reloadData];
                 return cell;
-                
             }
             if ([self.model.qq isEqual:@""]&&[self.model.weChat isEqual:@""]) {
                 
@@ -720,6 +753,8 @@
     UITableViewCell*cell=[self.tableview dequeueReusableCellWithIdentifier:@"Cell1"];
     if (!cell) {
         cell=[[UITableViewCell alloc]initWithStyle:1 reuseIdentifier:@"Cell1"];
+        
+        
     }
     for (NSInteger i=0; i<cell.contentView.subviews.count; i++) {
         UIView*view=cell.contentView.subviews[i];

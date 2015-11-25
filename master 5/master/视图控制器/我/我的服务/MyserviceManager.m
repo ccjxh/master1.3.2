@@ -39,7 +39,9 @@
 
     myServiceDetaiTableViewCell*cell=[tableView dequeueReusableCellWithIdentifier:@"myServiceDetaiTableViewCell"];
     if (!cell) {
-        cell=[[[NSBundle mainBundle]loadNibNamed:@"myServiceDetaiTableViewCell" owner:nil options:nil]lastObject];
+        UINib*nib=[UINib nibWithNibName:@"myServiceDetaiTableViewCell" bundle:[NSBundle mainBundle]];
+        [tableView registerNib:nib forCellReuseIdentifier:@"myServiceDetaiTableViewCell"];
+        cell=[tableView dequeueReusableCellWithIdentifier:@"myServiceDetaiTableViewCell"];
     }
     cell.contentToTop.constant=10;
     cell.contentToBottom.constant=10;

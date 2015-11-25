@@ -14,19 +14,18 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rnc-Ri-ZHH">
-                        <rect key="frame" x="18" y="8" width="42" height="21"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rnc-Ri-ZHH">
+                        <rect key="frame" x="13" y="5" width="70" height="33.5"/>
                         <animations/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="21" id="alR-lv-n2w"/>
-                            <constraint firstAttribute="width" constant="70" id="dw3-Hc-SCG"/>
+                            <constraint firstAttribute="width" constant="70" id="Zx2-RG-3Kc"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="GKt-IJ-5d5" customClass="GCPlaceholderTextView">
-                        <rect key="frame" x="118" y="8" width="194" height="33"/>
+                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="GKt-IJ-5d5" customClass="GCPlaceholderTextView">
+                        <rect key="frame" x="93" y="5" width="214" height="33.5"/>
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
@@ -36,12 +35,13 @@
                 </subviews>
                 <animations/>
                 <constraints>
-                    <constraint firstItem="GKt-IJ-5d5" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="4" id="WOZ-QW-S4K"/>
-                    <constraint firstItem="rnc-Ri-ZHH" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="cSc-eE-rB5"/>
-                    <constraint firstItem="GKt-IJ-5d5" firstAttribute="leading" secondItem="rnc-Ri-ZHH" secondAttribute="trailing" constant="10" id="ieC-9q-kdo"/>
-                    <constraint firstAttribute="bottom" secondItem="GKt-IJ-5d5" secondAttribute="bottom" constant="1" id="kPB-d5-7sr"/>
-                    <constraint firstAttribute="trailing" secondItem="GKt-IJ-5d5" secondAttribute="trailing" constant="13" id="onY-SG-zhM"/>
-                    <constraint firstItem="rnc-Ri-ZHH" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="13" id="vMa-A8-HqX"/>
+                    <constraint firstItem="GKt-IJ-5d5" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="6eY-3n-Pes"/>
+                    <constraint firstAttribute="bottom" secondItem="GKt-IJ-5d5" secondAttribute="bottom" constant="5" id="DLi-7n-bBF"/>
+                    <constraint firstAttribute="bottom" secondItem="rnc-Ri-ZHH" secondAttribute="bottom" constant="5" id="InS-TY-bV0"/>
+                    <constraint firstItem="rnc-Ri-ZHH" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="13" id="JIc-n0-4ua"/>
+                    <constraint firstItem="rnc-Ri-ZHH" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="VP7-n9-jyJ"/>
+                    <constraint firstItem="GKt-IJ-5d5" firstAttribute="leading" secondItem="rnc-Ri-ZHH" secondAttribute="trailing" constant="10" id="ewp-vw-wSS"/>
+                    <constraint firstAttribute="trailing" secondItem="GKt-IJ-5d5" secondAttribute="trailing" constant="13" id="j9G-El-JUE"/>
                 </constraints>
             </tableViewCellContentView>
             <animations/>

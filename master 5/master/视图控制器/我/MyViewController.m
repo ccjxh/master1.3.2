@@ -85,7 +85,7 @@
 - (void)viewDidLoad {
     
     [super viewDidLoad];
-    self.tableview.separatorStyle=0;
+    self.tableview.bounces=NO;
     [self receiveNotice];
     
 }

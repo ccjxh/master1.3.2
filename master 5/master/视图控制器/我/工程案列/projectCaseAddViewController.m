@@ -53,19 +53,8 @@
         [_modelArray addObject:temp];
         NSString*urlString=[NSString stringWithFormat:@"%@%@",changeURL,temp.resource];
         [_subDict setObject:urlString forKey:[NSString stringWithFormat:@"url%d",i]];
-        UIImageView*imageview=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 10, 10)];
-        [imageview sd_setImageWithURL:[NSURL URLWithString:urlString] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-            if (error) {
-                 [_picArray addObject:[UIImage imageNamed:@"碎图"]];
-            }else{
-            
-                [_picArray addObject:image];
-                
-            }
-            
-        }];
+        [_picArray addObject:temp];
     }
-    
     
     if (model.applyFlg==1) {
         _isShow=NO;
@@ -133,6 +122,8 @@
     if (self.model) {
     [self setModel:self.model];
     }
+    
+    
     if (self.model.opinion) {
         self.opinion.text=[NSString stringWithFormat:@"审核意见:%@",self.model.opinion];
         self.labelHeight.constant=[self accountStringHeightFromString:[NSString stringWithFormat:@"审核意见:%@",self.model.opinion] Width:SCREEN_WIDTH-26 FrontSize:15];
@@ -154,7 +145,6 @@
     regiButton.layer.cornerRadius=10;
     regiButton.backgroundColor=COLOR(21, 168, 235, 1);
     [regiButton addTarget:self action:@selector(confirm) forControlEvents:UIControlEventTouchUpInside];
-
 }
 
 
@@ -187,12 +177,11 @@
                 [self requestToken];
             }];
             return;
-    }
-        
+        }
         
         [self flowShow];
         NSMutableDictionary*dict=[[NSMutableDictionary alloc]init];;
-    NSString*urlString=[self interfaceFromString:interface_uploadPhotos];
+        NSString*urlString=[self interfaceFromString:interface_uploadPhotos];
         [dict setObject:[_subDict objectForKey:@"caseName"] forKey:@"caseName"];
         [dict setObject:[_subDict objectForKey:@"introduce"] forKey:@"introduce"];
         [dict setObject:@"2" forKey:@"type"];
@@ -202,14 +191,15 @@
             urlString=[self interfaceFromString:interface_updateCase];
             [dict setObject:[NSString stringWithFormat:@"%lu",self.model.id] forKey:@"id"];
             NSString*removeID;
-            
-            for (NSInteger i=0; i<_subDeleteArray.count; i++) {
-                caseDetail*tempModel=_subDeleteArray[i];
-                if (i==0) {
-                    removeID=[NSString stringWithFormat:@"%lu",tempModel.id];
-                }else{
-                
-                    removeID=[NSString stringWithFormat:@"%@,%lu",removeID,tempModel.id];
+            for (NSInteger i=0; i<_removeArray.count; i++) {
+                    caseDetail*tempModel=_removeArray[i];
+                    if (tempModel.isDelete==YES) {
+                        if (!removeID) {
+                            removeID=[NSString stringWithFormat:@"%lu",tempModel.id];
+                        }else{
+                        
+                            removeID=[NSString stringWithFormat:@"%@,%lu",removeID,tempModel.id];
+                    }
                 }
             }
             
@@ -219,9 +209,14 @@
         }
         
         [[httpManager share]POST:urlString parameters:dict constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+            NSInteger temp=0;
         for (NSInteger i=1; i<_picArray.count; i++) {
+            if ([_picArray[i] isKindOfClass:[caseDetail class]]==YES) {
+                temp++;
+                continue;
+            }
             NSData*imageData=UIImageJPEGRepresentation(_picArray[i], 1);
-              [formData appendPartWithFileData:imageData name:[NSString stringWithFormat:@"files[%d].file",i-1] fileName:[NSString stringWithFormat:@"%d.jpg",i] mimeType:@"image/jpg"];
+              [formData appendPartWithFileData:imageData name:[NSString stringWithFormat:@"files[%d].file",i-1-temp] fileName:[NSString stringWithFormat:@"%d.jpg",i-temp] mimeType:@"image/jpg"];
         }
     
     } success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -330,7 +325,9 @@
     if (indexPath.section<=1) {
         MyStartContentTableViewCell*cell=[tableView dequeueReusableCellWithIdentifier:@"MyStartContentTableViewCell"];
         if (!cell) {
-            cell=[[[NSBundle mainBundle]loadNibNamed:@"MyStartContentTableViewCell" owner:nil options:nil]lastObject];
+            UINib*nib=[UINib nibWithNibName:@"MyStartContentTableViewCell" bundle:[NSBundle mainBundle]];
+            [self.tableview registerNib:nib forCellReuseIdentifier:@"MyStartContentTableViewCell"];
+            cell=[tableView dequeueReusableCellWithIdentifier:@"MyStartContentTableViewCell"];
         }
         cell.selectionStyle=0;
         cell.tx.delegate=self;
@@ -362,14 +359,12 @@
     }
     cell.selectionStyle=0;
     cell.picArray=_picArray;
-    cell.ModelArray=_modelArray;
     cell.isShow=_isShow;
-    cell.block=^(NSInteger blockType,id objc,NSMutableArray*array){
+    cell.block=^(NSInteger blockType,id objc){
         switch (blockType) {
             case 1:
             {
             //拍照
-//                [self setUserHeaderIamge];
                 
                 [[PhotoManager share]getimageFromPhotosWithNavigation:self.navigationController];
                 [PhotoManager share].delegate=self;
@@ -379,18 +374,18 @@
                 case 2:
             {
             //删除
+                if ([objc isKindOfClass:[caseDetail class]]==YES) {
+                    [_picArray removeObject:objc];
+                    [_removeArray addObject:objc];
+                    [self.tableview reloadData];
+                    
+                }else{
                 UIImage*image=(UIImage*)objc;
                 [self.picArray removeObject:image];
                 NSIndexPath*path=[NSIndexPath indexPathForItem:0 inSection:2];
                 NSArray*array=@[path];
-                if (self.model) {
-                    for (NSInteger i=0; i<array.count; i++) {
-                        AreaModel*model=array[i];
-                        [_subDeleteArray addObject:model];
-                    }
-                   
-                }
                 [self.tableview reloadRowsAtIndexPaths:array withRowAnimation:UITableViewRowAnimationAutomatic];
+                }
             }
                 
                 break;

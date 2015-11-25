@@ -1,5 +1,5 @@
 {
-  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "54F504E9285916353411AF26278EDAAB7B787CF7",
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "57FCA78555E92DA4774219D3A1B7B8F93EE0CDED",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
     "c1b34985-89f7-4ad2-b6ed-32456ccb691a++2406" : {
 
@@ -9,19 +9,21 @@
     }
   },
   "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "c1b34985-89f7-4ad2-b6ed-32456ccb691a++2406" : 0,
     "3E2EE0438BDA0DEA40B39A6D22D46F31E4DD1F11" : 0,
     "c1b34985-89f7-4ad2-b6ed-32456ccb691a++8605" : 0,
-    "54F504E9285916353411AF26278EDAAB7B787CF7" : 0,
+    "57FCA78555E92DA4774219D3A1B7B8F93EE0CDED" : 0,
     "2BDBC9017752F3B032A7CEF16283A8DC753AB7A9" : 0,
-    "c1b34985-89f7-4ad2-b6ed-32456ccb691a++2406" : 0
+    "54F504E9285916353411AF26278EDAAB7B787CF7" : 0
   },
   "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "3FA2E7DD-BFAD-42E7-9362-092F9126B867",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "c1b34985-89f7-4ad2-b6ed-32456ccb691a++2406" : "master1.2\/master%205\/master\/%E7%AC%AC%E4%B8%89%E6%96%B9\/ZYChat\/ZYChat\/ZYChat\/Dependcy\/GJCFAssetsPicker\/GJCFAssetsPickerResourceBundle.bundle\/",
     "3E2EE0438BDA0DEA40B39A6D22D46F31E4DD1F11" : "master1.2\/",
     "c1b34985-89f7-4ad2-b6ed-32456ccb691a++8605" : "master1.2\/master%205\/master\/%E7%AC%AC%E4%B8%89%E6%96%B9\/ZYChat\/ZYChat\/ZYChat\/Dependcy\/GJCUCapture\/",
-    "54F504E9285916353411AF26278EDAAB7B787CF7" : "master1.3.1\/",
+    "57FCA78555E92DA4774219D3A1B7B8F93EE0CDED" : "master1.3.2\/",
     "2BDBC9017752F3B032A7CEF16283A8DC753AB7A9" : "baoself1.0",
-    "c1b34985-89f7-4ad2-b6ed-32456ccb691a++2406" : "master1.2\/master%205\/master\/%E7%AC%AC%E4%B8%89%E6%96%B9\/ZYChat\/ZYChat\/ZYChat\/Dependcy\/GJCFAssetsPicker\/GJCFAssetsPickerResourceBundle.bundle\/"
+    "54F504E9285916353411AF26278EDAAB7B787CF7" : "master1.3.1\/"
   },
   "DVTSourceControlWorkspaceBlueprintNameKey" : "master",
   "DVTSourceControlWorkspaceBlueprintVersion" : 204,
@@ -41,6 +43,11 @@
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/ccjxh\/master1.3.1.git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "54F504E9285916353411AF26278EDAAB7B787CF7"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/ccjxh\/master1.3.2.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "57FCA78555E92DA4774219D3A1B7B8F93EE0CDED"
     },
     {
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "http:\/\/192.168.64.5:8888\/svn\/Mobile",
