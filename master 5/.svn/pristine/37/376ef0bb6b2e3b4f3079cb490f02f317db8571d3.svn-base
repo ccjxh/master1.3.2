@@ -1,0 +1,76 @@
+//
+//  skillTableViewCell.m
+//  master
+//
+//  Created by jin on 15/5/19.
+//  Copyright (c) 2015年 JXH. All rights reserved.
+//
+
+#import "skillTableViewCell.h"
+@implementation skillTableViewCell
+{
+    NSMutableArray*_valueArray;
+}
+- (void)awakeFromNib {
+    // Initialization code
+    if (!_valueArray ) {
+        _valueArray =[[NSMutableArray alloc]init];
+    }
+    NSMutableArray*array=[[dataBase share]findAllSkill];
+    
+    
+    
+    for (NSInteger i=0; i<array.count;i++) {
+        UIButton*button=[[UIButton alloc]initWithFrame:CGRectMake(10+i%3*((SCREEN_WIDTH-20-40)/3+20), 30+i/3*45, (SCREEN_WIDTH-20-40)/3, 35)];
+        skillModel*model=array[i];
+        button.backgroundColor=COLOR(249, 249, 249, 1);
+        button.titleLabel.font=[UIFont systemFontOfSize:14];
+        [button setTitle:model.name forState:UIControlStateNormal];
+        [button setTitleColor:COLOR(108, 108, 108, 1) forState:UIControlStateNormal];
+        button.titleLabel.lineBreakMode=UILineBreakModeCharacterWrap;
+        [button addTarget:self action:@selector(onclick:) forControlEvents:UIControlEventTouchUpInside];
+        button.layer.cornerRadius=10;
+        button.tag=30+i;
+        [self addSubview:button];
+    }
+    
+}
+
+
+-(void)onclick:(UIButton*)button
+{
+    NSMutableArray*array=[[dataBase share]findAllSkill];
+    if (button.selected==NO) {
+        button.backgroundColor=COLOR(67, 172, 219, 1);
+        [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        button.selected=YES;
+    }
+    else
+    {
+        button.backgroundColor=COLOR(249, 249, 249, 1);
+        [button setTitleColor:COLOR(108, 108, 108, 1) forState:UIControlStateNormal];
+        button.selected=NO;
+        
+    }
+    [_valueArray removeAllObjects];
+    for (NSInteger i=0; i<array.count; i++) {
+        skillModel*model=array[i];
+        UIButton*valueButton=(id)[self viewWithTag:30+i];
+        NSString*ID;
+        if (valueButton.selected==YES) {
+            ID=[NSString stringWithFormat:@"%u",model.id];
+            [_valueArray addObject:ID];
+        }
+    }
+    if (_block) {
+        _block(_valueArray);
+    }
+    
+}
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    [super setSelected:selected animated:animated];
+
+    // Configure the view for the selected state
+}
+
+@end

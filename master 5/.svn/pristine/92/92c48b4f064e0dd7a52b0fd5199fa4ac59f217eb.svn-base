@@ -1,0 +1,17 @@
+//
+//  selectViewController.h
+//  master
+//
+//  Created by jin on 15/5/18.
+//  Copyright (c) 2015年 JXH. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface selectViewController : RootViewController<CLLocationManagerDelegate>
+@property(nonatomic)CLLocationManager*mapManager;
+@property (weak, nonatomic) IBOutlet UIButton *allbutton;
+@property (weak, nonatomic) IBOutlet UIButton *confirmButton;
+@property (weak, nonatomic) IBOutlet UIButton *recommend;
+@property(nonatomic)CLGeocoder*geocoder;
+@end

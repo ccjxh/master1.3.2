@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="selectViewController">
+            <connections>
+                <outlet property="backImage" destination="l6d-bc-xjB" id="tlF-t8-9j8"/>
+                <outlet property="head" destination="uod-WY-Rte" id="BSF-OA-Twq"/>
+                <outlet property="manager" destination="tkY-lY-BnL" id="uFr-TO-tK8"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="l6d-bc-xjB">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                </imageView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uod-WY-Rte">
+                    <rect key="frame" x="20" y="190" width="130" height="80"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="80" id="oh4-Th-6m4"/>
+                    </constraints>
+                    <state key="normal">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="head:" destination="-1" eventType="touchUpInside" id="2PK-64-Rnr"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tkY-lY-BnL">
+                    <rect key="frame" x="170" y="190" width="130" height="80"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="80" id="gHO-hJ-Tim"/>
+                    </constraints>
+                    <state key="normal">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="manager:" destination="-1" eventType="touchUpInside" id="45r-5T-duR"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="tkY-lY-BnL" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="190" id="HuZ-BW-hH6"/>
+                <constraint firstAttribute="trailing" secondItem="tkY-lY-BnL" secondAttribute="trailing" constant="20" id="XSh-a8-kM5"/>
+                <constraint firstItem="uod-WY-Rte" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="190" id="XwJ-MO-XN6"/>
+                <constraint firstAttribute="trailing" secondItem="l6d-bc-xjB" secondAttribute="trailing" id="a5s-zN-2nr"/>
+                <constraint firstItem="tkY-lY-BnL" firstAttribute="leading" secondItem="uod-WY-Rte" secondAttribute="trailing" constant="20" id="fLb-OS-Wf2"/>
+                <constraint firstItem="uod-WY-Rte" firstAttribute="width" secondItem="tkY-lY-BnL" secondAttribute="width" id="iFI-60-Kzm"/>
+                <constraint firstAttribute="bottom" secondItem="l6d-bc-xjB" secondAttribute="bottom" id="lN9-u5-Ac1"/>
+                <constraint firstItem="l6d-bc-xjB" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="pPf-ER-CoR"/>
+                <constraint firstItem="uod-WY-Rte" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="20" id="qZw-9W-8RZ"/>
+                <constraint firstItem="l6d-bc-xjB" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="tMs-Rm-tSl"/>
+            </constraints>
+            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+        </view>
+    </objects>
+</document>

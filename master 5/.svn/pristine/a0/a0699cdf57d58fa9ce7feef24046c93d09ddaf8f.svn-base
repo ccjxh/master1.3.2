@@ -1,0 +1,150 @@
+//
+//  MyInfoTableViewCell.m
+//  master
+//
+//  Created by xuting on 15/5/25.
+//  Copyright (c) 2015年 JXH. All rights reserved.
+//
+
+#import "MyInfoTableViewCell.h"
+#import "requestModel.h"
+
+@implementation MyInfoTableViewCell
+
+- (void)awakeFromNib {
+    // Initialization code
+}
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    [super setSelected:selected animated:animated];
+    
+    // Configure the view for the selected state
+}
+-(void) upDateWithModel:(long)section :(long)row :(PersonalDetailModel *)model :(NSString *)urlString :(BOOL)type
+{
+    //设置右边箭头
+    self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    self.listLabel.font = [UIFont systemFontOfSize:14];
+    self.contentLabel.font = [UIFont systemFontOfSize:14];
+    switch (section)
+    {
+        case 0:
+        {
+            self.listLabel.text = @"头像";
+           UIImageView *image = [requestModel isDisplayPersonalInfoImage:urlString ];
+            UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(SCREEN_WIDTH-100, 10, 60, 60)];
+            imageView.image = [UIImage imageNamed:@"头像背景遮罩"];
+            
+            [self.contentView addSubview:image];
+            [self.contentView addSubview:imageView];
+        }
+            break;
+        case 1:
+        {
+            if (row == 0)
+            {
+                
+                self.listLabel.text = @"性别";
+                if ([model.gendar isEqualToString:@""])
+                {
+                    self.contentLabel.text = @"请选择性别";
+                    self.contentLabel.textColor = [UIColor grayColor];
+                }
+                else
+                {
+                    self.contentLabel.text = model.gendar;
+                    self.contentLabel.textColor = [UIColor blackColor];
+                }
+            }
+            else
+            {
+                
+                self.listLabel.text = @"籍贯";
+                NSString *str = [model.nativeProvince objectForKey:@"name"];
+                str = [str stringByAppendingFormat:@"-%@",[model.nativeCity objectForKey:@"name"]];
+                str = [str stringByAppendingFormat:@"-%@",[model.nativeRegion objectForKey:@"name"]];
+                
+                self.contentLabel.text = str;
+
+            }
+        }
+            break;
+        case 2:
+        {
+            if (row == 0)
+            {
+                self.listLabel.text = @"电话号码";
+                if([model.mobile isEqualToString:@""])
+                {
+                    self.contentLabel.text = @"请输入电话号码";
+                    self.contentLabel.textColor = [UIColor grayColor];
+                }
+                else
+                {
+                    self.contentLabel.text = model.mobile;
+                    self.contentLabel.textColor = [UIColor blackColor];
+                }
+            }
+            else if (row == 1)
+            {
+                self.listLabel.text = @"QQ号";
+                if([model.qq isEqualToString:@""])
+                {
+                    self.contentLabel.text = @"请输入QQ号";
+                    self.contentLabel.textColor = [UIColor grayColor];
+                }
+                else
+                {
+                    self.contentLabel.text = model.qq;
+                    self.contentLabel.textColor = [UIColor blackColor];
+                }
+            }
+            else
+            {
+                self.listLabel.text = @"微信号";
+                if([model.weChat isEqualToString:@""])
+                {
+                    self.contentLabel.text = @"请输入微信号";
+                    self.contentLabel.textColor = [UIColor grayColor];
+                }
+                else
+                {
+                    self.contentLabel.text = model.weChat;
+                    self.contentLabel.textColor = [UIColor blackColor];
+                }
+            }
+        }
+            break;
+        case 3:
+        {
+            self.listLabel.text = @"个人认证";
+//            NSLog(@"%@",[model.certification objectForKey:@"personal"]);
+            if ([[model.certification objectForKey:@"personal"] intValue] == 0 && [[model.certification objectForKey:@"company"] intValue] == 0)
+            {
+//                self.contentLabel.text = @"未认证";
+                if ([[model.certification objectForKey:@"personalState"] intValue] == 0 && [[model.certification objectForKey:@"companyState"] intValue] == 0)
+                {
+                    self.contentLabel.text = @"未认证";
+                }
+                else
+                {
+                    self.contentLabel.text = @"认证中";
+                }
+            }
+//            else  if ([[model.certification objectForKey:@"personal"] intValue] == 0&&[[model.certification objectForKey:@"personalState"] intValue] == 1)
+//            {
+//                self.contentLabel.text = @"认证中";
+//                self.contentLabel.textColor = [UIColor grayColor];
+//            }
+            else
+            {
+                self.contentLabel.text = @"已认证";
+                self.contentLabel.textColor = [UIColor grayColor];
+            }
+        }
+            break;
+        default:
+            break;
+    }
+}
+@end

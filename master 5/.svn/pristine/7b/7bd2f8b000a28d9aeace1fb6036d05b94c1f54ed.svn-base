@@ -1,0 +1,18 @@
+//
+//  selectViewController.h
+//  master
+//
+//  Created by jin on 15/5/18.
+//  Copyright (c) 2015年 JXH. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+#import "SDCycleScrollView.h"
+@interface selectViewController : RootViewController<CLLocationManagerDelegate>
+@property(nonatomic)CLLocationManager*mapManager;
+@property (weak, nonatomic) IBOutlet UIImageView *backImage;
+@property (weak, nonatomic) IBOutlet UIButton *head;
+@property (weak, nonatomic) IBOutlet UIButton *manager;
+@property (weak, nonatomic) IBOutlet SDCycleScrollView *adview;
+@property(nonatomic)CLGeocoder*geocoder;
+@end

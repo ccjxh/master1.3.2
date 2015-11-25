@@ -1,0 +1,16 @@
+//
+//  commendTableViewCell.h
+//  master
+//
+//  Created by jin on 15/7/9.
+//  Copyright (c) 2015年 JXH. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface commendTableViewCell : UITableViewCell
+@property (weak, nonatomic) IBOutlet UILabel *name;
+@property (weak, nonatomic) IBOutlet UILabel *content;
+@property(nonatomic)NSString*contentStr;//内容数组
+-(void)reloadData;
+@end

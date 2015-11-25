@@ -1,0 +1,475 @@
+//
+//  myorderDetailViewController.m
+//  master
+//
+//  Created by jin on 15/6/3.
+//  Copyright (c) 2015年 JXH. All rights reserved.
+//
+
+#import "myorderDetailViewController.h"
+#import "replyViewController.h"
+
+@interface myorderDetailViewController ()
+
+@end
+
+@implementation myorderDetailViewController
+
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view.
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+-(void)send{
+    
+    NSString*urlString=[self interfaceFromString: interface_myOrderDetail];
+    [self requestWithUrl:urlString];
+}
+
+
+-(void)finish{
+    
+    
+    
+    starModel*model=[[starModel alloc]init];
+    [model setValuesForKeysWithDictionary:[self.currentDict objectForKey:@"orderComment"][0]];
+    
+    if (model.reply.allKeys.count>1) {
+       
+        UIView*view1=(id)[self.view viewWithTag:100];
+        if (view1) {
+            [view1 removeFromSuperview];
+  
+            
+            
+        }
+        
+    }else{
+    
+    self.tableview.tableFooterView=[self setupFoot];
+    }
+
+}
+
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+
+    if (self.recommentStatus==1) {
+        
+        return 6;
+    }
+    return 5;
+    
+}
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    if (section==5) {
+        starModel*model=[[starModel alloc]init];
+        [model setValuesForKeysWithDictionary:[self.currentDict objectForKey:@"orderComment"][0]];
+        if ([[model.reply objectForKey:@"content"] length]!=0) {
+            return 2;
+        }
+        return 1;
+    }
+
+    return 1;
+}
+
+-(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    switch (indexPath.section) {
+        case 0:
+        {
+            peopleDetailTableViewCell*cell=[tableView dequeueReusableCellWithIdentifier:@"peopleDetailTableViewCell"];
+            if (!cell) {
+                cell=[[[NSBundle mainBundle]loadNibNamed:@"peopleDetailTableViewCell" owner:nil options:nil]lastObject];
+            }
+            if (self.dataArray.count!=0) {
+                MasterDetailModel*model=self.dataArray[0];
+                [cell upDateWithModel:model];
+            }
+            cell.userInteractionEnabled=NO;
+            cell.selected=NO;
+            return cell;
+        
+        }
+            break;
+        case 1:{
+            peopleDetaileeTableViewCell*cell=[tableView dequeueReusableCellWithIdentifier:@"peopleDetaileeTableViewCell"];
+            if (!cell) {
+                cell=[[[NSBundle mainBundle]loadNibNamed:@"peopleDetaileeTableViewCell" owner:nil options:nil]lastObject];
+            }
+            if (self.dataArray.count!=0) {
+                MasterDetailModel*model=self.dataArray[0];
+               [cell upDateWithModel3:model];
+            }
+            cell.selectionStyle=0;
+            return cell;
+        
+        }
+            break;
+        case 2:{
+            return [self getbeskeak:tableView];
+            
+        }
+            break;
+        case 3:{
+            
+            return [self getSkillCellWithTableview:tableView];
+        
+        }
+            break;
+        case 4:{
+            
+            
+            return  [self getRemark:tableView];
+        }
+            break;
+        case 5:{
+            if (indexPath.row==0) {
+                recommendTableViewCell*cell=[tableView dequeueReusableCellWithIdentifier:@"Cell"];
+                if (!cell) {
+                    cell=[[[NSBundle mainBundle]loadNibNamed:@"recommendTableViewCell" owner:nil options:nil] lastObject];
+                    
+                }
+                if (self.recommentStatus==1) {
+                    starModel*model=[[starModel alloc]init];
+                    [model setValuesForKeysWithDictionary:[self.currentDict objectForKey:@"orderComment"][0]];
+                    cell.model=model;
+                    cell.userInteractionEnabled=NO;
+                    [cell reloadData];
+                }
+                return cell;
+            }
+            if (indexPath.row==1) {
+                replyTableViewCell*cell=[tableView dequeueReusableCellWithIdentifier:@"replyTableViewCell"];
+                if (!cell) {
+                    cell=[[[NSBundle mainBundle]loadNibNamed:@"replyTableViewCell" owner:nil options:nil]lastObject];
+                }
+                starModel*model=[[starModel alloc]init];
+                [model setValuesForKeysWithDictionary:[self.currentDict objectForKey:@"orderComment"][0]];
+                cell.name.layer.cornerRadius=5;
+                cell.name.text=[NSString stringWithFormat:@"%@回复:%@",[model.reply objectForKey:@"user"],[model.reply objectForKey:@"content"]];
+                cell.name.backgroundColor=COLOR(228, 228, 228, 1);
+                return cell;
+            }
+            
+        }
+            break;
+
+        default:
+            break;
+    }
+    UITableViewCell*cell=[[UITableViewCell alloc]initWithStyle:1 reuseIdentifier:@"cell"];
+    return cell;
+
+}
+
+
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (indexPath.section==0) {
+        return 105;
+        
+    }
+    else if (indexPath.section==1){
+    
+        return 115;
+        
+    }else if (indexPath.section==3){
+    
+        if (self.dataArray.count!=0) {
+        return [self accountSkill];
+        }
+    }else if (indexPath.section==5)
+    {
+        if (indexPath.row==0) {
+            NSString*temp=[[self.currentDict objectForKey:@"orderComment"][0] objectForKey:@"content"];
+            CGFloat height=[self accountStringHeightFromString:temp Width:SCREEN_WIDTH-20]+[self accountPic];
+            if ([(NSArray*)([[self.currentDict objectForKey:@"orderComment"][0] objectForKey:@"picCase"]) count]%4==0) {
+                return ([(NSArray*)([[self.currentDict objectForKey:@"orderComment"][0] objectForKey:@"picCase"]) count]/4)*45+30+height;
+            }
+            else{
+                return ([(NSArray*)([[self.currentDict objectForKey:@"orderComment"][0] objectForKey:@"picCase"]) count]/4+1)*45+30+height;
+            }
+        }
+        if (indexPath.row==1) {
+            starModel*model=[[starModel alloc]init];
+            [model setValuesForKeysWithDictionary:[self.currentDict objectForKey:@"orderComment"][0]];
+            
+            return [self accountStringHeightFromString:[model.reply objectForKey:@"content"] Width:SCREEN_WIDTH-150]+10;
+        }
+
+    
+    
+    }
+    
+    return 50;
+}
+
+
+
+-(CGFloat)accountPic{
+    starModel*model=[[starModel alloc]init];
+    [model setValuesForKeysWithDictionary:[self.currentDict objectForKey:@"orderComment"][0]];
+    if (model.picCase.count%4==0) {
+        return model.picCase.count/4*40;
+    }
+    else{
+        return (model.picCase.count/4+1)*45;
+        
+    }
+    
+}
+
+
+-(UIView*)setupFoot{
+    
+    UIView*view=(id)[self.view viewWithTag:100];
+    if (view) {
+        [view removeFromSuperview];
+    }
+    view=[[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 40)];
+    view.tag=100;
+    
+    switch (self.billStatus) {
+       case 1:
+            self.orderStatus=@"接受";
+            break;
+            case 2:
+            self.orderStatus=@"等待对方确认完工";
+            break;
+        case 3:
+            self.orderStatus=@"已拒绝";
+            break;
+        case 4:
+            if (self.recommentStatus==2) {
+                self.orderStatus=@"等待对方评价";
+            }else{
+                self.orderStatus=@"待回复";
+            }
+            break;
+        case 5:
+            self.orderStatus=@"已终结";
+            break;
+        default:
+            break;
+    }
+
+    NSArray*array=@[@"拒绝",@"终止合同"];
+    NSString*title;
+    if (self.billStatus==1||self.billStatus==2) {
+        switch (self.billStatus) {
+            case 1:
+                title=array[0];
+                break;
+                case 2:
+                title=array[1];
+                break;
+            default:
+                break;
+        }
+        UIButton*button=[[UIButton alloc]initWithFrame:CGRectMake(30, 5, 80, 30)];
+        [button setTitle:title forState:UIControlStateNormal];
+        [button setTitleColor:[UIColor orangeColor] forState:UIControlStateNormal];
+        button.titleLabel.font=[UIFont systemFontOfSize:16];
+        button.layer.borderColor=[UIColor orangeColor].CGColor;
+        button.layer.borderWidth=1;
+        button.layer.cornerRadius=5;
+        [button addTarget:self action:@selector(refuse:) forControlEvents:UIControlEventTouchUpInside];
+        [view addSubview:button];
+        
+    }
+    
+    self.statusButton=[[UIButton alloc]initWithFrame:CGRectMake(30, 5, SCREEN_WIDTH-60, 30)];
+    if (self.billStatus==2||self.billStatus==1) {
+        self.statusButton.frame=CGRectMake(120, 5, SCREEN_WIDTH-150, 30);
+    }
+    self.statusButton.backgroundColor=[UIColor orangeColor];
+    self.statusButton.layer.cornerRadius=5;
+    [self.statusButton setTitle:self.orderStatus forState:UIControlStateNormal];
+    [self.statusButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    self.statusButton.titleLabel.font=[UIFont systemFontOfSize:17];
+    [self.statusButton addTarget:self action:@selector(reply:) forControlEvents:UIControlEventTouchUpInside];
+    [view addSubview:self.statusButton];
+    return view;
+
+}
+
+
+-(void)reply:(UIButton*)button{
+    
+    if ([button.titleLabel.text isEqualToString:@"接受"]==YES) {
+        
+       NSString* urlString=[self interfaceFromString:interface_accept];
+        NSDictionary*dict=@{@"id":[NSString stringWithFormat:@"%lu",self.id]};
+        [[httpManager share]POST:urlString parameters:dict success:^(AFHTTPRequestOperation *Operation, id responseObject) {
+            NSDictionary*dict=(NSDictionary*)responseObject;
+            if ([[dict objectForKey:@"rspCode"] integerValue]==200) {
+                [self.view makeToast:@"已接受" duration:1 position:@"center" Finish:^{
+                    [self send];
+                }];
+                [self popWithnimation:self.navigationController];
+            }
+            
+        } failure:^(AFHTTPRequestOperation *Operation, NSError *error) {
+            
+        }];
+        
+    }
+    
+    
+    if ([button.titleLabel.text isEqualToString:@"待回复"]==YES) {
+    replyViewController*rvc=[[replyViewController alloc]initWithNibName:@"replyViewController" bundle:nil];
+    rvc.dataArray=self.dataArray;
+    rvc.masterID=self.masterID;
+    rvc.id=self.id;
+    [self pushWinthAnimation:self.navigationController Viewcontroller:rvc];
+    }
+}
+
+-(void)refuse:(UIButton*)button{
+    NSString*urlString;
+    if ([button.titleLabel.text isEqualToString:@"拒绝"]==YES) {
+        
+        urlString=[self interfaceFromString:interface_refuse];
+        _messageView=[[UIView alloc]initWithFrame:CGRectMake(SCREEN_WIDTH/2-100, SCREEN_HEIGHT/2-150, 200, 300)];
+        _tv=[[UITextView alloc]initWithFrame:CGRectMake(10, 10, 190, 240)];
+        _tv.textColor=[UIColor blackColor];
+        _tv.font=[UIFont systemFontOfSize:15];
+        _messageView.userInteractionEnabled=YES;
+        [_messageView addSubview:_tv];
+        NSArray*array=@[@"确定",@"取消"];
+        for (NSInteger i=0; i<2; i++) {
+            UIButton*button=[[UIButton alloc]initWithFrame:CGRectMake(25+100*i, 260, 60, 30)];
+            button.layer.cornerRadius=10;
+            button.backgroundColor=[UIColor orangeColor];
+            [button setTitle:array[i] forState:UIControlStateNormal];
+            [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+            button.titleLabel.font=[UIFont systemFontOfSize:16];
+            [button addTarget:self action:@selector(send:) forControlEvents:UIControlEventTouchUpInside];
+            [_messageView addSubview:button];
+            POPBasicAnimation* basicAnimation = [POPBasicAnimation animationWithPropertyNamed:kPOPLayerCornerRadius];
+            
+            basicAnimation.toValue = [NSNumber numberWithFloat:CGRectGetHeight(_messageView.frame)];
+            
+            basicAnimation.timingFunction =[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+            
+            //    basicAnimation.duration = 3.f;
+            
+            [basicAnimation setCompletionBlock:^(POPAnimation * ani, BOOL fin) {
+                
+            }];
+            
+            [_messageView.layer pop_addAnimation:basicAnimation forKey:@"frameChange"];
+            [self.view addSubview:_messageView];
+            
+        }
+        
+    }
+    
+    if ([button.titleLabel.text isEqualToString:@"终止合同"]==YES) {
+        //终止合同操作
+        
+        
+        
+    }
+    
+}
+
+
+-(void)send:(UIButton*)button{
+    
+    if ([button.titleLabel.text isEqualToString:@"取消"]==YES) {
+        [_messageView removeFromSuperview];
+    }
+    else{
+        
+        
+        if (_tv.text.length==0) {
+            [self.view makeToast:@"内容不能为空" duration:1 position:@"center"];
+            return;
+        }
+        NSString*urlString=[self interfaceFromString:interface_refuse];
+        NSDictionary*dict=@{@"id":[NSString stringWithFormat:@"%lu",self.id],@"opinion":self.tv.text};
+        [[httpManager share]POST:urlString parameters:dict success:^(AFHTTPRequestOperation *Operation, id responseObject) {
+            NSDictionary*dict=(NSDictionary*)responseObject;
+            if ([[dict objectForKey:@"rspCode"] integerValue]==200) {
+                [self popWithnimation:self.navigationController];
+            }
+        } failure:^(AFHTTPRequestOperation *Operation, NSError *error) {
+            
+        }];
+    
+    }
+
+}
+
+
+//技能
+-(UITableViewCell*)getSkillCellWithTableview:(UITableView*)tableView{
+    UITableViewCell*cell=[tableView dequeueReusableCellWithIdentifier:@"CEll"];
+    if (!cell) {
+        cell=[[UITableViewCell alloc]initWithStyle:1 reuseIdentifier:@"CEll"];
+    }
+    if (self.skillArray.count==0) {
+        cell.textLabel.text=@"该用户暂时木有技能";
+        cell.textLabel.textColor=COLOR(228, 228, 228, 1);
+        return cell;
+    }
+    cell.textLabel.text=nil;
+    UIView*view=(id)[self.view viewWithTag:31];
+    if (view) {
+        [view removeFromSuperview];
+    }
+    view=[[UIView alloc]initWithFrame:cell.bounds];
+    view.tag=31;
+    for (NSInteger i=0; i<self.skillArray.count; i++) {
+        skillModel*model=self.skillArray[i];
+        NSInteger width=(SCREEN_WIDTH-20-30)/4;
+        UILabel*label=[[UILabel alloc]initWithFrame:CGRectMake(10+i%4*(width+5), 5+i/4*30, width-10, 25)];
+        label.text=model.name;
+        label.tag=12;
+        label.font=[UIFont systemFontOfSize:12];
+        label.layer.borderWidth=1;
+        label.layer.cornerRadius=10;
+        label.textAlignment=NSTextAlignmentCenter;
+        label.textColor=[UIColor lightGrayColor];
+        if (model.isSelect==YES) {
+            label.textColor=COLOR(29, 90, 172, 1);
+            label.layer.borderColor=[COLOR(29, 90, 172, 1)CGColor];
+        }
+        
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        label.enabled=YES;
+        label.userInteractionEnabled=NO;
+        
+        [view addSubview:label];
+        [cell.contentView addSubview:view];
+    }
+    return cell;
+}
+-(CGFloat)accountSkill{
+    
+    if (self.skillArray.count==0) {
+        return 50;
+    }
+    else
+    {
+        if (self.skillArray.count%4==0) {
+            
+            return self.skillArray.count/4*30+10;
+    }
+        else
+        {
+            return (self.skillArray.count/4+1)*30+10;
+        }
+    }
+}
+
+
+@end

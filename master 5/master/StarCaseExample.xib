@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9059" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="02t-XQ-Yux" customClass="StarCaseExample">
+            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="现场施工照1.png" translatesAutoresizingMaskIntoConstraints="NO" id="Rx8-j7-66c">
+                    <rect key="frame" x="13" y="40" width="70" height="70"/>
+                    <animations/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="70" id="EIH-I9-WFK"/>
+                        <constraint firstAttribute="width" constant="70" id="fEH-Xe-4ix"/>
+                    </constraints>
+                </imageView>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="工地全景.png" translatesAutoresizingMaskIntoConstraints="NO" id="zX0-Fl-x7Q">
+                    <rect key="frame" x="265" y="40" width="70" height="70"/>
+                    <animations/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="70" id="kge-zQ-MQp"/>
+                        <constraint firstAttribute="width" constant="70" id="omN-w6-rdE"/>
+                    </constraints>
+                </imageView>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="防水施工面.png" translatesAutoresizingMaskIntoConstraints="NO" id="Lfe-RP-10j">
+                    <rect key="frame" x="517" y="40" width="70" height="70"/>
+                    <animations/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="70" id="rBY-NE-Agr"/>
+                        <constraint firstAttribute="height" constant="70" id="xck-1f-1av"/>
+                    </constraints>
+                </imageView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="  " textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zQE-IH-jUw">
+                    <rect key="frame" x="13" y="120" width="70" height="35"/>
+                    <animations/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="70" id="Kac-Ye-UW3"/>
+                        <constraint firstAttribute="height" constant="35" id="eKn-vP-GUt"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="工地全景" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jQA-vW-AIV">
+                    <rect key="frame" x="265" y="120" width="70" height="20"/>
+                    <animations/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="70" id="9nB-HZ-RDt"/>
+                        <constraint firstAttribute="height" constant="20" id="dtJ-gB-erb"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="示例照片" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WlS-0R-U0s">
+                    <rect key="frame" x="13" y="10" width="574" height="21"/>
+                    <animations/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="20" id="IaJ-06-b13"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                    <color key="textColor" red="1" green="0.5" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="防水施工面" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IkP-kT-gly">
+                    <rect key="frame" x="517" y="120" width="70" height="20"/>
+                    <animations/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="20" id="RvF-gL-iqK"/>
+                        <constraint firstAttribute="width" constant="70" id="WFp-QE-Bkk"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <animations/>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="zQE-IH-jUw" firstAttribute="top" secondItem="Rx8-j7-66c" secondAttribute="bottom" constant="10" id="0Bi-fi-xHm"/>
+                <constraint firstItem="Lfe-RP-10j" firstAttribute="top" secondItem="WlS-0R-U0s" secondAttribute="bottom" constant="10" id="2p3-FS-tKa"/>
+                <constraint firstItem="WlS-0R-U0s" firstAttribute="top" secondItem="02t-XQ-Yux" secondAttribute="top" constant="10" id="8Ob-iP-Kvg"/>
+                <constraint firstAttribute="trailing" secondItem="IkP-kT-gly" secondAttribute="trailing" constant="13" id="8ZJ-2P-Kzn"/>
+                <constraint firstAttribute="trailing" secondItem="Lfe-RP-10j" secondAttribute="trailing" constant="13" id="EjI-13-h3x"/>
+                <constraint firstItem="jQA-vW-AIV" firstAttribute="centerX" secondItem="02t-XQ-Yux" secondAttribute="centerX" id="HSD-Zb-a4f"/>
+                <constraint firstItem="IkP-kT-gly" firstAttribute="top" secondItem="Lfe-RP-10j" secondAttribute="bottom" constant="10" id="NPV-Kc-RD4"/>
+                <constraint firstItem="jQA-vW-AIV" firstAttribute="top" secondItem="zX0-Fl-x7Q" secondAttribute="bottom" constant="10" id="RoB-e2-Agk"/>
+                <constraint firstAttribute="trailing" secondItem="WlS-0R-U0s" secondAttribute="trailing" constant="13" id="Skj-AY-SV4"/>
+                <constraint firstItem="Rx8-j7-66c" firstAttribute="top" secondItem="WlS-0R-U0s" secondAttribute="bottom" constant="10" id="dqW-be-VGU"/>
+                <constraint firstItem="zQE-IH-jUw" firstAttribute="leading" secondItem="02t-XQ-Yux" secondAttribute="leading" constant="13" id="eOx-Et-yZY"/>
+                <constraint firstItem="Rx8-j7-66c" firstAttribute="leading" secondItem="02t-XQ-Yux" secondAttribute="leading" constant="13" id="naP-ED-jdy"/>
+                <constraint firstItem="zX0-Fl-x7Q" firstAttribute="centerX" secondItem="02t-XQ-Yux" secondAttribute="centerX" id="qL4-cX-vqV"/>
+                <constraint firstItem="WlS-0R-U0s" firstAttribute="leading" secondItem="02t-XQ-Yux" secondAttribute="leading" constant="13" id="w7M-H9-fEV"/>
+                <constraint firstItem="zX0-Fl-x7Q" firstAttribute="top" secondItem="WlS-0R-U0s" secondAttribute="bottom" constant="10" id="wFL-jp-mtC"/>
+            </constraints>
+            <connections>
+                <outlet property="firstLabel" destination="zQE-IH-jUw" id="5Xc-bc-jFd"/>
+            </connections>
+            <point key="canvasLocation" x="272" y="232"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="工地全景.png" width="70" height="70"/>
+        <image name="现场施工照1.png" width="70" height="70"/>
+        <image name="防水施工面.png" width="70" height="70"/>
+    </resources>
+</document>

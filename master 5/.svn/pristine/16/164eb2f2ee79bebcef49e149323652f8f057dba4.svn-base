@@ -1,0 +1,31 @@
+//
+//  AboutViewController.m
+//  master
+//
+//  Created by xuting on 15/5/27.
+//  Copyright (c) 2015年 JXH. All rights reserved.
+//
+
+#import "AboutViewController.h"
+
+@interface AboutViewController ()
+
+@end
+
+@implementation AboutViewController
+
+
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view from its nib.
+    self.navigationItem.title=@"关于";
+    //将网址设为链接
+    self.siteTextView.dataDetectorTypes = UIDataDetectorTypeAll;
+    self.siteTextView.font = [UIFont systemFontOfSize:14];
+    self.siteTextView.editable = NO;
+    self.siteTextView.text = @"www.zhuobao.com\r\n";
+}
+
+
+@end

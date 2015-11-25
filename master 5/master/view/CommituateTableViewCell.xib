@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9059" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="KGk-i7-Jjw" customClass="CommituateTableViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="社        交" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TfZ-Jj-LLE">
+                        <rect key="frame" x="13" y="4" width="79" height="21"/>
+                        <animations/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="20" id="2eR-Af-8y9"/>
+                            <constraint firstAttribute="width" constant="70" id="f4W-ui-8DK"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hiO-yL-Z6L">
+                        <rect key="frame" x="218" y="0.0" width="94" height="40"/>
+                        <animations/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="18" id="YHM-Zg-hQc"/>
+                            <constraint firstAttribute="width" constant="18" id="i5Z-ix-tvS"/>
+                        </constraints>
+                        <state key="normal" title="Button" image="ic_qq.png"/>
+                        <connections>
+                            <action selector="qq:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="lX5-1O-Ye2"/>
+                        </connections>
+                    </button>
+                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7AF-LH-kBa">
+                        <rect key="frame" x="128" y="2" width="40" height="40"/>
+                        <animations/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="18" id="5HN-aZ-wP5"/>
+                            <constraint firstAttribute="width" constant="18" id="jWq-w6-n5o"/>
+                        </constraints>
+                        <state key="normal" image="ic_wechat.png"/>
+                        <connections>
+                            <action selector="weChat:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="EhV-op-04b"/>
+                        </connections>
+                    </button>
+                </subviews>
+                <animations/>
+                <constraints>
+                    <constraint firstItem="7AF-LH-kBa" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="11" id="9nl-qV-ZQ7"/>
+                    <constraint firstItem="TfZ-Jj-LLE" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="13" id="Iiu-ps-pe1"/>
+                    <constraint firstItem="hiO-yL-Z6L" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="11" id="JWV-eE-MlI"/>
+                    <constraint firstItem="7AF-LH-kBa" firstAttribute="leading" secondItem="TfZ-Jj-LLE" secondAttribute="trailing" constant="10" id="bBe-C4-m17"/>
+                    <constraint firstItem="TfZ-Jj-LLE" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="drg-uG-eoU"/>
+                    <constraint firstItem="hiO-yL-Z6L" firstAttribute="leading" secondItem="7AF-LH-kBa" secondAttribute="trailing" constant="10" id="fXv-zU-RNu"/>
+                </constraints>
+            </tableViewCellContentView>
+            <animations/>
+            <connections>
+                <outlet property="qqWidth" destination="i5Z-ix-tvS" id="lG9-64-bVe"/>
+                <outlet property="weChatWidth" destination="jWq-w6-n5o" id="fCc-C6-1JH"/>
+            </connections>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="ic_qq.png" width="40" height="40"/>
+        <image name="ic_wechat.png" width="40" height="40"/>
+    </resources>
+</document>

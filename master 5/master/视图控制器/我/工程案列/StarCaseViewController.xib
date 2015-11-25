@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9059" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="StarCaseViewController">
+            <connections>
+                <outlet property="labelHeight" destination="BNO-f8-JLd" id="Tjm-R2-GIZ"/>
+                <outlet property="opinion" destination="Tan-6b-meh" id="9qM-uU-X9Y"/>
+                <outlet property="registerButton" destination="skE-0Z-CA9" id="qeh-sR-1IM"/>
+                <outlet property="tableview" destination="afQ-AV-dxp" id="74I-23-Fjt"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="afQ-AV-dxp">
+                    <rect key="frame" x="132" y="203" width="240" height="128"/>
+                    <animations/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <connections>
+                        <outlet property="dataSource" destination="-1" id="Egs-Sk-l6i"/>
+                        <outlet property="delegate" destination="-1" id="S4k-ZM-KM7"/>
+                    </connections>
+                </tableView>
+                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="skE-0Z-CA9">
+                    <rect key="frame" x="177" y="526" width="209" height="30"/>
+                    <animations/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="35" id="u5e-Dg-t8n"/>
+                    </constraints>
+                    <state key="normal" title="提交审核">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tan-6b-meh">
+                    <rect key="frame" x="80" y="36" width="306" height="21"/>
+                    <animations/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="21" id="BNO-f8-JLd"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <color key="textColor" red="1" green="1" blue="1" alpha="0.59999999999999998" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <animations/>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="afQ-AV-dxp" secondAttribute="trailing" id="18U-7B-Hk0"/>
+                <constraint firstItem="Tan-6b-meh" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="13" id="Nhf-VW-uCC"/>
+                <constraint firstItem="afQ-AV-dxp" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="Os4-Or-vG0"/>
+                <constraint firstAttribute="bottom" secondItem="skE-0Z-CA9" secondAttribute="bottom" constant="5" id="W7L-Kx-WEC"/>
+                <constraint firstAttribute="trailing" secondItem="Tan-6b-meh" secondAttribute="trailing" constant="13" id="WX2-oj-lmp"/>
+                <constraint firstAttribute="trailing" secondItem="skE-0Z-CA9" secondAttribute="trailing" constant="13" id="WpQ-Hz-1bd"/>
+                <constraint firstItem="afQ-AV-dxp" firstAttribute="top" secondItem="Tan-6b-meh" secondAttribute="bottom" id="XcQ-9l-Ash"/>
+                <constraint firstItem="Tan-6b-meh" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="64" id="cEP-Wv-jtW"/>
+                <constraint firstItem="skE-0Z-CA9" firstAttribute="top" secondItem="afQ-AV-dxp" secondAttribute="bottom" id="dXj-ZF-qNW"/>
+                <constraint firstItem="skE-0Z-CA9" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="13" id="yeI-tt-7kv"/>
+            </constraints>
+        </view>
+    </objects>
+</document>

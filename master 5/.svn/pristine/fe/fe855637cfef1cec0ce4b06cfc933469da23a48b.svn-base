@@ -1,0 +1,463 @@
+//
+//  AppDelegate.m
+//  master
+//
+//  Created by jin on 15/5/5.
+//  Copyright (c) 2015年 JXH. All rights reserved.
+//
+
+#import "AppDelegate.h"
+#import "LoginViewController.h"
+#import "orderViewController.h"
+#import "selectViewController.h"
+#import "MyViewController.h"
+#import "XGPush.h"
+#import "XGSetting.h"
+#import <CoreLocation/CoreLocation.h>
+@interface AppDelegate ()<TencentSessionDelegate,WXApiDelegate>
+@property (nonatomic) CLLocationManager *locMgr;
+@end
+/**
+ * 用户岗位(1--雇主,2--师傅，3--包工头，4--项目经理)
+ */
+@implementation AppDelegate
+
+
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
+    [self setupPushWithDictory:launchOptions];//推送相关设置
+    
+    [[dataBase share]CreateAllTables]; //创建数据库
+    
+    [self requestSkills];//缓存技能列表并缓存
+    
+   
+    
+    [self dataBase];//缓存城市
+    
+    [self setupBaiDuMap];//设置地图
+    
+    [WXApi registerApp:@"wxaa561e93e30b45ca"];//微信注册
+    
+//    [self setupADImage];
+    
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.window.backgroundColor = [UIColor whiteColor];
+    LoginViewController*lvc=[[LoginViewController alloc]init];
+    self.nc=[[UINavigationController alloc]initWithRootViewController:lvc];
+    _nc.navigationBar.barStyle=1;
+    _nc.navigationBar.barTintColor=NAV_COLOR;
+    self.window.rootViewController=_nc;
+    [self.window makeKeyAndVisible];
+    return YES;
+}
+
+
+//推送
+-(void)setupPushWithDictory:(NSDictionary*)dict {
+    
+    
+    [XGPush startApp:2200123145 appKey:@"IT2RW4D1E84M"];
+    
+    //注销之后需要再次注册前的准备
+    void (^successCallback)(void) = ^(void){
+        //如果变成需要注册状态
+        if(![XGPush isUnRegisterStatus])
+        {
+            //iOS8注册push方法
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= _IPHONE80_
+            
+            float sysVer = [[[UIDevice currentDevice] systemVersion] floatValue];
+            if(sysVer < 8){
+                [self resignNoticeation];
+            }
+            else{
+                [self registerPushForIOS8];
+            }
+#else
+            //iOS8之前注册push方法
+            //注册Push服务，注册后才能收到推送
+            [self resignNoticeation];
+#endif
+        }
+    };
+    [XGPush initForReregister:successCallback];
+    
+    //推送反馈回调版本示例
+    void (^successBlock)(void) = ^(void){
+        //成功之后的处理
+//        NSLog(@"[XGPush]handleLaunching's successBlock");
+    };
+    
+    void (^errorBlock)(void) = ^(void){
+        //失败之后的处理
+//        NSLog(@"[XGPush]handleLaunching's errorBlock");
+    };
+    
+    //角标清0
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+    [XGPush handleLaunching:dict successCallback:successBlock errorCallback:errorBlock];
+    //清除所有通知(包含本地通知)
+    //[[UIApplication sharedApplication] cancelAllLocalNotifications];
+    
+
+}
+
+
+//设置广告界面
+-(void)setupADImage{
+
+    self.adimage=[[UIImageView  alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
+    self.adimage.image=[UIImage imageNamed:@"叉叉.png"];
+    [self.window addSubview:self.adimage];
+    [self performSelector:@selector(removeAdImageView) withObject:nil afterDelay:1];
+
+}
+
+
+
+-(void)setupBaiDuMap{
+
+    _mapManager = [[BMKMapManager alloc]init];
+    // 如果要关注网络及授权验证事件，请设定     generalDelegate参数
+    BOOL ret = [_mapManager start:@"GK6ttaQ8hXmIyFRjafl9gGP2"  generalDelegate:nil];
+    if (!ret) {
+        
+    }
+
+}
+
+
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
+{
+    //CLLocation中存放的是一些经纬度, 速度等信息. 要获取地理位置需要转换做地理位置编码.
+    // 1.取出位置对象
+    CLLocation *loc = [locations firstObject];
+    
+//    NSLog(@"CLLocation----%@",loc);
+    
+    // 2.取出经纬度
+    CLLocationCoordinate2D coordinate = loc.coordinate;
+    
+    // 3.打印经纬度
+//    NSLog(@"didUpdateLocations------%f %f", coordinate.latitude, coordinate.longitude);
+    
+    // 停止定位(省电措施：只要不想用定位服务，就马上停止定位服务)
+    [manager stopUpdatingLocation];
+}
+
+
+-(void)removeAdImageView{
+
+    
+
+    [UIView animateWithDuration:0.7f animations:^{
+        self.adimage.transform =CGAffineTransformScale(self.adimage.transform, 1.5, 1.6);
+    } completion:^(BOOL finished) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.03 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            self.window.rootViewController=_nc;
+            [self.adimage removeFromSuperview];
+         });
+    }];
+}
+
+
+-(void)setupHome
+{
+    
+    [self requestInformation];//缓存个人信息
+    selectViewController*hvc=[[selectViewController alloc]init];
+    hvc.title=@"首页";
+    UINavigationController*nc=[[UINavigationController alloc]initWithRootViewController:hvc];
+    nc.navigationBar.barTintColor=COLOR(67, 172, 219, 1);
+    nc.navigationBar.barStyle=1;
+    orderViewController*ovc=[[orderViewController alloc]initWithNibName:@"orderViewController" bundle:nil];
+    UINavigationController*nc1=[[UINavigationController alloc]initWithRootViewController:ovc];
+    nc1.navigationBar.barTintColor=COLOR(67, 172, 219, 1);
+    ovc.title=@"订单";
+    nc1.navigationBar.barStyle=1;
+    MyViewController*mvc=[[MyViewController alloc]init];
+    UINavigationController*nc2=[[UINavigationController alloc]initWithRootViewController:mvc];
+    nc2.navigationBar.barStyle=1;
+    nc2.navigationBar.barTintColor=COLOR(67, 172, 219, 1);
+    mvc.title=@"我";
+   
+    UITabBarItem*item1=[[UITabBarItem alloc]initWithTitle:@"首页" image: [UIImage imageNamed:@"找师傅-未选中"] selectedImage: [UIImage imageNamed:@"找师傅-选中"]];
+     UITabBarItem*item2=[[UITabBarItem alloc]initWithTitle:@"订单" image: [UIImage imageNamed:@"订单-未选中"] selectedImage: [UIImage imageNamed:@"订单-选中"]];
+    UITabBarItem*item3=[[UITabBarItem alloc]initWithTitle:@"我的" image: [UIImage imageNamed:@"我的-未选中"] selectedImage: [UIImage imageNamed:@"我的-选中"]];
+    UITabBarController*cvc=[[UITabBarController alloc]init];
+    cvc.viewControllers=@[nc,nc1,nc2];
+    nc.tabBarItem=item1;
+    nc1.tabBarItem=item2;
+    nc2.tabBarItem=item3;
+    self.window.rootViewController=cvc;
+    
+}
+-(void) setLogout
+{
+    LoginViewController *ctl = [[LoginViewController alloc] init];
+    self.window.rootViewController = ctl;
+}
+
+
+//腾讯QQ分享
+-(void)setupQQShare{
+
+    TencentOAuth*tencentOAuth = [[TencentOAuth alloc] initWithAppId:@"1104650241" andDelegate:self];
+    
+}
+
+
+-(void)dataBase
+{
+    AreaModel*model=[[dataBase share]findWithCity:@"深圳市"];
+    if (model.indexLetter==nil) {
+        NSString*urlString=[self interfaceFromString: interface_cityList];
+        [[httpManager share]GET:urlString parameters:nil success:^(AFHTTPRequestOperation *Operation, id responseObject) {
+            NSDictionary*dict=(NSDictionary*)responseObject;
+            NSArray*array=[dict objectForKey:@"entities"] ;
+            [[dataBase share]addCityToDataBase:array Pid:200000];
+        } failure:^(AFHTTPRequestOperation *Operation, NSError *error) {
+            //                NSLog(@"%@",error);
+        }];
+    }
+}
+
+
+
+//技能筛选项请求
+-(void)requestSkills
+{
+    NSString*urlString=[self interfaceFromString:interface_skill];
+    [[httpManager share]GET:urlString parameters:nil success:^(AFHTTPRequestOperation *Operation, id responseObject) {
+        NSMutableArray*array =[self arrayFromJosn:responseObject Type:@"servicerSkills" Model:@"skillModel"];
+        for (NSInteger i=0; i<array.count; i++) {
+            skillModel*model=array[i];
+            [[dataBase share]addSkillModel:model];
+        }
+        
+    } failure:^(AFHTTPRequestOperation *Operation, NSError *error) {
+        
+    }];
+}
+
+
+//缓存个人信息
+-(void)requestInformation{
+    NSString *urlString = [self interfaceFromString:interface_personalDetail];
+    [[httpManager share]GET:urlString parameters:nil success:^(AFHTTPRequestOperation *Operation, id responseObject) {
+        NSDictionary *dict = (NSDictionary*)responseObject;
+        NSDictionary *entityDic = [dict objectForKey:@"entity"];
+        NSDictionary *userDic = [entityDic objectForKey:@"user"];
+        PersonalDetailModel*model=[[PersonalDetailModel alloc]init];
+        [model setValuesForKeysWithDictionary:userDic];
+        AppDelegate*delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+//        [[dataBase share]deleInformationWithID:delegate.id];
+        [[dataBase share]addInformationWithModel:model];
+    } failure:^(AFHTTPRequestOperation *Operation, NSError *error) {
+        
+    }];
+    
+}
+
+
+
+
+-(void)resignNoticeation{
+    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound)];
+
+}
+
+
+- (void)registerPushForIOS8{
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= _IPHONE80_
+    
+    //Types
+    UIUserNotificationType types = UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
+    
+    //Actions
+    UIMutableUserNotificationAction *acceptAction = [[UIMutableUserNotificationAction alloc] init];
+    acceptAction.identifier = @"单据通知";
+    acceptAction.title = @"进入";
+    acceptAction.activationMode = UIUserNotificationActivationModeForeground;
+    acceptAction.destructive = NO;
+    acceptAction.authenticationRequired = NO;
+    
+    //Categories
+    UIMutableUserNotificationCategory *inviteCategory = [[UIMutableUserNotificationCategory alloc] init];
+    
+    inviteCategory.identifier = @"INVITE_CATEGORY";
+    
+    [inviteCategory setActions:@[acceptAction] forContext:UIUserNotificationActionContextMinimal];
+    
+    [inviteCategory setActions:@[acceptAction] forContext:UIUserNotificationActionContextMinimal];
+    
+    NSSet *categories = [NSSet setWithObjects:inviteCategory, nil];
+    
+    
+    UIUserNotificationSettings *mySettings = [UIUserNotificationSettings settingsForTypes:types categories:categories];
+    
+    [[UIApplication sharedApplication] registerUserNotificationSettings:mySettings];
+    [[UIApplication sharedApplication] registerForRemoteNotifications];
+    
+    
+#endif
+}
+
+
+//-(void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification{
+//    //notification是发送推送时传入的字典信息
+//    [XGPush localNotificationAtFrontEnd:notification userInfoKey:@"clockID" userInfoValue:@"myid"];
+//    
+//    //删除推送列表中的这一条
+//    [XGPush delLocalNotification:notification];
+//    //[XGPush delLocalNotification:@"clockID" userInfoValue:@"myid"];
+//    
+//    //清空推送列表
+//    //[XGPush clearLocalNotifications];
+//}
+
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= _IPHONE80_
+
+//注册UserNotification成功的回调
+- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings
+{
+    //用户已经允许接收以下类型的推送
+    //UIUserNotificationType allowedTypes = [notificationSettings types];
+    
+}
+
+//按钮点击事件回调
+- (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(NSDictionary *)userInfo completionHandler:(void (^)())completionHandler{
+        if([identifier isEqualToString:@"ACCEPT_IDENTIFIER"]){
+//        NSLog(@"ACCEPT_IDENTIFIER is clicked");
+    }
+    
+    completionHandler();
+}
+
+#endif
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    
+    //NSString * deviceTokenStr = [XGPush registerDevice:deviceToken];
+    
+    void (^successBlock)(void) = ^(void){
+        //成功之后的处理
+//        NSLog(@"[XGPush]register successBlock");
+    };
+    
+    void (^errorBlock)(void) = ^(void){
+        //失败之后的处理
+//        NSLog(@"[XGPush]register errorBlock");
+    };
+    
+    //注册设备
+    [[XGSetting getInstance] setChannel:@"appstore"];
+    [[XGSetting getInstance] setGameServer:@"巨神峰"];
+    
+    
+    NSString * deviceTokenStr = [XGPush registerDevice:deviceToken successCallback:successBlock errorCallback:errorBlock];
+    
+    //如果不需要回调
+    //[XGPush registerDevice:deviceToken];
+    //打印获取的deviceToken的字符串
+//    NSLog(@"deviceTokenStr is %@",deviceTokenStr);
+}
+
+//如果deviceToken获取不到会进入此事件
+- (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err {
+    
+    NSString *str = [NSString stringWithFormat: @"Error: %@",err];
+    
+    
+}
+
+- (void)application:(UIApplication*)application didReceiveRemoteNotification:(NSDictionary*)userInfo
+{
+       NSData*data=[DES decryptWithText:[[userInfo objectForKey:@"aps"] objectForKey:@"alert"] Key:pushKey];
+    NSDictionary*temp=[NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:nil];
+    NSMutableDictionary*dict=[[NSMutableDictionary alloc]init];
+    NSMutableDictionary*dict1=[[NSMutableDictionary alloc]init];
+    NSMutableDictionary*dict2=[[NSMutableDictionary alloc]init];
+    [dict1 setValue:[temp objectForKey:@"content"] forKey:@"alert"];
+    [dict2 setValue:[[userInfo objectForKey:@"xg"] objectForKey:@"bid"] forKey:@"bid"];
+    [dict2 setValue:[[userInfo objectForKey:@"xg"] objectForKey:@"ts"] forKey:@"ts"];
+    
+    [dict setObject:dict1 forKey:@"aps"];
+    [dict setObject:dict2 forKey:@"xg"];
+//    NSLog(@"%@",dict);
+    //推送反馈(app运行时)
+    [XGPush handleReceiveNotification:dict];
+    NSDate *fireDate = [[NSDate new] dateByAddingTimeInterval:1];
+    
+    NSMutableDictionary *dicUserInfo = [[NSMutableDictionary alloc] init];
+    [dicUserInfo setValue:@"myid" forKey:@"clockID"];
+   
+    
+    [XGPush localNotification:fireDate alertBody:@"测试本地推送" badge:2 alertAction:@"确定" userInfo:dict];
+    //回调版本示例
+    /*
+     void (^successBlock)(void) = ^(void){
+     //成功之后的处理
+     NSLog(@"[XGPush]handleReceiveNotification successBlock");
+     };
+     
+     void (^errorBlock)(void) = ^(void){
+     //失败之后的处理
+     NSLog(@"[XGPush]handleReceiveNotification errorBlock");
+     };
+     
+     void (^completion)(void) = ^(void){
+     //失败之后的处理
+     NSLog(@"[xg push completion]userInfo is %@",userInfo);
+     };
+     
+     [XGPush handleReceiveNotification:userInfo successCallback:successBlock errorCallback:errorBlock completion:completion];
+     */
+}
+
+
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation{
+    
+    return [WXApi handleOpenURL:url delegate:self];
+    return [TencentOAuth HandleOpenURL:url];
+    
+}
+
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url{
+    return [TencentOAuth HandleOpenURL:url];
+    return [WXApi handleOpenURL:url delegate:self];
+}
+
+
+- (void)applicationWillResignActive:(UIApplication *)application {
+    // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
+    // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+}
+
+- (void)applicationDidEnterBackground:(UIApplication *)application {
+    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
+    // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+}
+
+- (void)applicationWillEnterForeground:(UIApplication *)application {
+    // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+}
+
+- (void)applicationDidBecomeActive:(UIApplication *)application {
+    
+    
+    
+    
+    // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+}
+
+- (void)applicationWillTerminate:(UIApplication *)application {
+    // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+
+@end

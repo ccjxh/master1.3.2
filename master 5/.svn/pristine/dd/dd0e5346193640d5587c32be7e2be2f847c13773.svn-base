@@ -1,0 +1,82 @@
+//
+//  secondTableViewCell.m
+//  master
+//
+//  Created by jin on 15/5/19.
+//  Copyright (c) 2015年 JXH. All rights reserved.
+//
+
+#import "secondTableViewCell.h"
+
+@implementation secondTableViewCell
+
+- (void)awakeFromNib {
+    // Initialization code
+    [self initUI];
+}
+
+
+-(void)initUI
+{
+    NSArray*array=@[@"不限",@"1-3",@"3-5",@"5-10",@"10年以上"];
+    for (NSInteger i=0; i<5;i++) {
+        UIButton*button=[[UIButton alloc]initWithFrame:CGRectMake(10+i%3*((SCREEN_WIDTH-20-40)/3+20), 30+i/3*45, (SCREEN_WIDTH-20-40)/3, 35)];
+        button.backgroundColor=COLOR(249, 249, 249, 1);
+        button.titleLabel.font=[UIFont systemFontOfSize:14];
+        [button setTitle:array[i] forState:UIControlStateNormal];
+        [button setTitleColor:COLOR(108, 108, 108, 1) forState:UIControlStateNormal];
+        button.titleLabel.lineBreakMode=UILineBreakModeCharacterWrap;
+        [button addTarget:self action:@selector(onclick:) forControlEvents:UIControlEventTouchUpInside];
+        button.layer.cornerRadius=10;
+        button.tag=10+i;
+        [self addSubview:button];
+    }
+
+}
+
+-(void)onclick:(UIButton*)button
+{
+    button.backgroundColor=COLOR(67, 172, 219, 1);
+    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    for (NSInteger i=0; i<5; i++) {
+        UIButton*tempButton=(id)[self viewWithTag:10+i];
+        if (button.tag==tempButton.tag) {
+            continue;
+        }
+        [tempButton setTitleColor:COLOR(108, 108, 108, 1) forState:UIControlStateNormal];
+        tempButton.backgroundColor=COLOR(249, 249, 249, 1);
+    }
+    if (_block) {
+        if (button.tag!=10) {
+            NSString*tempString;
+            switch (button.tag-10) {
+                case 1:
+                    
+                    tempString=@"1-3";
+                    break;
+                    case 2:
+                    tempString=@"3-5";
+                    break;
+                    case 3:
+                    tempString=@"5-10";
+                    break;
+                    case 4:
+                    tempString=@"10-100";
+                    break;
+                default:
+                    break;
+            }
+            
+        _block(tempString);
+        }
+    }
+}
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    [super setSelected:selected animated:animated];
+
+   
+}
+
+
+
+@end

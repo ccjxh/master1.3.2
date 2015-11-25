@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="selectViewController">
+            <connections>
+                <outlet property="allbutton" destination="CXL-qM-cMg" id="41V-6d-Icr"/>
+                <outlet property="confirmButton" destination="Xcc-CH-vJD" id="Jm0-w2-ujb"/>
+                <outlet property="head" destination="SnE-0K-Wk0" id="CPH-zr-pxk"/>
+                <outlet property="manager" destination="ogt-du-xj9" id="LeO-uh-NQk"/>
+                <outlet property="recommend" destination="0K2-Gz-fEu" id="GUm-rY-NHv"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SnE-0K-Wk0">
+                    <rect key="frame" x="165" y="185" width="145" height="80"/>
+                    <color key="backgroundColor" red="1" green="0.43529412150382996" blue="0.81176471710205078" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="80" id="y1Q-Sv-gwP"/>
+                    </constraints>
+                    <state key="normal">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="headAction:" destination="-1" eventType="touchUpInside" id="38o-bX-pcU"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ogt-du-xj9">
+                    <rect key="frame" x="10" y="185" width="145" height="80"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="80" id="Wkl-Ye-pRH"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                    <state key="normal">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="managerAction:" destination="-1" eventType="touchUpInside" id="vII-Lb-uZj"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CXL-qM-cMg">
+                    <rect key="frame" x="59" y="326" width="183" height="30"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <state key="normal" title="全部订单">
+                        <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xcc-CH-vJD">
+                    <rect key="frame" x="59" y="378" width="172" height="30"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <state key="normal" title="待办订单">
+                        <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0K2-Gz-fEu">
+                    <rect key="frame" x="59" y="426" width="164" height="30"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <state key="normal" title="带评价订单">
+                        <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="CXL-qM-cMg" firstAttribute="top" secondItem="ogt-du-xj9" secondAttribute="bottom" constant="10" id="3mW-CI-Akh"/>
+                <constraint firstItem="SnE-0K-Wk0" firstAttribute="width" secondItem="ogt-du-xj9" secondAttribute="width" id="3yT-BL-Tbk"/>
+                <constraint firstItem="ogt-du-xj9" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="10" id="70R-41-71q"/>
+                <constraint firstItem="ogt-du-xj9" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="185" id="Au2-D4-TlH"/>
+                <constraint firstItem="Xcc-CH-vJD" firstAttribute="top" secondItem="CXL-qM-cMg" secondAttribute="bottom" constant="10" id="ENI-Yg-Acy"/>
+                <constraint firstAttribute="trailing" secondItem="0K2-Gz-fEu" secondAttribute="trailing" constant="10" id="EcB-I9-a7J"/>
+                <constraint firstItem="0K2-Gz-fEu" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="10" id="EcM-8L-ng9"/>
+                <constraint firstItem="CXL-qM-cMg" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="10" id="FBm-Yq-Mnh"/>
+                <constraint firstItem="Xcc-CH-vJD" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="10" id="K8A-tN-ggk"/>
+                <constraint firstItem="0K2-Gz-fEu" firstAttribute="top" secondItem="Xcc-CH-vJD" secondAttribute="bottom" constant="10" id="LmU-kK-KLn"/>
+                <constraint firstItem="SnE-0K-Wk0" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="185" id="Mly-UM-KyP"/>
+                <constraint firstAttribute="trailing" secondItem="Xcc-CH-vJD" secondAttribute="trailing" constant="10" id="NgL-L0-f1t"/>
+                <constraint firstItem="SnE-0K-Wk0" firstAttribute="leading" secondItem="ogt-du-xj9" secondAttribute="trailing" constant="10" id="Vv9-wu-hEx"/>
+                <constraint firstItem="CXL-qM-cMg" firstAttribute="height" secondItem="0K2-Gz-fEu" secondAttribute="height" id="Z4E-PJ-D0p"/>
+                <constraint firstAttribute="bottom" secondItem="0K2-Gz-fEu" secondAttribute="bottom" constant="79" id="aIw-ex-2ec"/>
+                <constraint firstItem="CXL-qM-cMg" firstAttribute="height" secondItem="Xcc-CH-vJD" secondAttribute="height" id="gRD-ay-df5"/>
+                <constraint firstItem="SnE-0K-Wk0" firstAttribute="leading" secondItem="ogt-du-xj9" secondAttribute="trailing" constant="10" id="mDP-Ji-M2i"/>
+                <constraint firstAttribute="trailing" secondItem="SnE-0K-Wk0" secondAttribute="trailing" constant="10" id="mXE-Cp-2OV"/>
+                <constraint firstAttribute="trailing" secondItem="CXL-qM-cMg" secondAttribute="trailing" constant="10" id="pOh-uZ-aFu"/>
+            </constraints>
+            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+        </view>
+    </objects>
+</document>

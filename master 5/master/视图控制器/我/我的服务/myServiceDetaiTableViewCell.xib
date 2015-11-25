@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9059" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="myServiceDetaiTableViewCell" id="KGk-i7-Jjw" customClass="myServiceDetaiTableViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1K4-R7-gaP">
+                        <rect key="frame" x="93" y="0.0" width="214" height="43.5"/>
+                        <animations/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mtq-Oq-CZH">
+                        <rect key="frame" x="13" y="0.0" width="70" height="43.5"/>
+                        <animations/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="70" id="k0n-rD-1ED"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <animations/>
+                <constraints>
+                    <constraint firstAttribute="bottom" secondItem="mtq-Oq-CZH" secondAttribute="bottom" id="DC9-ev-fFP"/>
+                    <constraint firstItem="mtq-Oq-CZH" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="13" id="GTq-pJ-Eqm"/>
+                    <constraint firstAttribute="bottom" secondItem="1K4-R7-gaP" secondAttribute="bottom" id="PCs-By-S99"/>
+                    <constraint firstItem="1K4-R7-gaP" firstAttribute="leading" secondItem="mtq-Oq-CZH" secondAttribute="trailing" constant="10" id="SCG-Tu-YUg"/>
+                    <constraint firstItem="1K4-R7-gaP" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="Sc0-RU-Szw"/>
+                    <constraint firstAttribute="trailing" secondItem="1K4-R7-gaP" secondAttribute="trailing" constant="13" id="nFe-KR-obM"/>
+                    <constraint firstItem="mtq-Oq-CZH" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="uUa-u4-b2a"/>
+                </constraints>
+            </tableViewCellContentView>
+            <animations/>
+            <connections>
+                <outlet property="content" destination="1K4-R7-gaP" id="aMc-xr-Sc2"/>
+                <outlet property="contentToBottom" destination="PCs-By-S99" id="5gG-nF-mUw"/>
+                <outlet property="contentToTop" destination="Sc0-RU-Szw" id="k32-xX-2gV"/>
+                <outlet property="liadToRight" destination="nFe-KR-obM" id="znh-sf-bbT"/>
+                <outlet property="name" destination="mtq-Oq-CZH" id="BJt-lA-dbT"/>
+            </connections>
+        </tableViewCell>
+    </objects>
+</document>

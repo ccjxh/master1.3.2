@@ -1,0 +1,20 @@
+//
+//  MyInfoTableViewCell.h
+//  master
+//
+//  Created by xuting on 15/5/25.
+//  Copyright (c) 2015年 JXH. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+#import "PersonalDetailModel.h"
+
+@interface MyInfoTableViewCell : UITableViewCell
+
+@property (weak, nonatomic) IBOutlet UILabel *listLabel;
+@property (weak, nonatomic) IBOutlet UILabel *contentLabel;
+
+@property (nonatomic,copy) PersonalDetailModel *model;
+-(void) upDateWithModel:(long)section :(long)row :(PersonalDetailModel *)model : (NSString *)urlString :(BOOL)type;
+
+@end

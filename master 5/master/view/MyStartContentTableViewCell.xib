@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9059" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="KGk-i7-Jjw" customClass="MyStartContentTableViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rnc-Ri-ZHH">
+                        <rect key="frame" x="18" y="8" width="42" height="21"/>
+                        <animations/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="21" id="alR-lv-n2w"/>
+                            <constraint firstAttribute="width" constant="70" id="dw3-Hc-SCG"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="GKt-IJ-5d5" customClass="GCPlaceholderTextView">
+                        <rect key="frame" x="118" y="8" width="194" height="33"/>
+                        <animations/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                    </textView>
+                </subviews>
+                <animations/>
+                <constraints>
+                    <constraint firstItem="GKt-IJ-5d5" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="4" id="WOZ-QW-S4K"/>
+                    <constraint firstItem="rnc-Ri-ZHH" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="cSc-eE-rB5"/>
+                    <constraint firstItem="GKt-IJ-5d5" firstAttribute="leading" secondItem="rnc-Ri-ZHH" secondAttribute="trailing" constant="10" id="ieC-9q-kdo"/>
+                    <constraint firstAttribute="bottom" secondItem="GKt-IJ-5d5" secondAttribute="bottom" constant="1" id="kPB-d5-7sr"/>
+                    <constraint firstAttribute="trailing" secondItem="GKt-IJ-5d5" secondAttribute="trailing" constant="13" id="onY-SG-zhM"/>
+                    <constraint firstItem="rnc-Ri-ZHH" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="13" id="vMa-A8-HqX"/>
+                </constraints>
+            </tableViewCellContentView>
+            <animations/>
+            <connections>
+                <outlet property="name" destination="rnc-Ri-ZHH" id="sA6-Zt-CuX"/>
+                <outlet property="tx" destination="GKt-IJ-5d5" id="6HW-x0-WcQ"/>
+            </connections>
+        </tableViewCell>
+    </objects>
+</document>

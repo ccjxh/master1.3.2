@@ -1,0 +1,59 @@
+//
+//  recommendTableViewCell.m
+//  master
+//
+//  Created by jin on 15/6/2.
+//  Copyright (c) 2015年 JXH. All rights reserved.
+//
+
+#import "recommendTableViewCell.h"
+
+@implementation recommendTableViewCell
+
+- (void)awakeFromNib {
+    
+    
+}
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    [super setSelected:selected animated:animated];
+
+    // Configure the view for the selected state
+}
+
+
+-(void)reloadData{
+    self.stars.image=[UIImage imageNamed:[NSString stringWithFormat:@"ic_star_%lu",(long)self.model.star]];
+    self.name.text=self.model.user;
+    self.content.text=self.model.content;
+    self.time.text=self.model.createTime;
+    NSString*urlString=[NSString stringWithFormat:@"%@%@",changeURL,self.model.icon];
+       [self.headImage sd_setImageWithURL:[NSURL URLWithString:urlString]];
+    [self setimage];
+    if (self.model.acceptSkill.count!=0) {
+        NSString*skillString;
+        for (NSInteger i=0; i<self.model.acceptSkill.count; i++) {
+            if (i==0) {
+                skillString=self.model.acceptSkill[i];
+            }else{
+                skillString=[NSString stringWithFormat:@"%@、%@",skillString,self.model.acceptSkill[i]];
+            }
+        }
+        self.skill.text=skillString;
+        CGFloat height=[self accountStringHeightFromString:skillString Width:SCREEN_WIDTH-70-15];
+        self.skill.frame=CGRectMake(self.skill.frame.origin.x, self.skill.frame.origin.y, self.skill.frame.size.width, height);
+    }
+}
+
+
+-(void)setimage{
+    NSInteger space=(SCREEN_WIDTH-140-20)/3;
+    for (NSInteger i=0; i<self.model.picCase.count; i++) {
+        UIImageView*imageview=[[UIImageView alloc]initWithFrame:CGRectMake(10+i%4*(40+5),(i/4)*45 , 40, 40)];
+        NSString*urlString=[NSString stringWithFormat:@"%@%@",changeURL,self.model.picCase[i]];
+        [imageview sd_setImageWithURL:[NSURL URLWithString:urlString]];
+        [self.backView addSubview:imageview];
+    }
+}
+
+@end

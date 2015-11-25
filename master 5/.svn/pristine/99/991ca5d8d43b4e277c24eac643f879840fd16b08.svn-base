@@ -1,0 +1,129 @@
+//
+//  orderListRootViewController.m
+//  master
+//
+//  Created by jin on 15/6/2.
+//  Copyright (c) 2015年 JXH. All rights reserved.
+//
+
+#import "orderListRootViewController.h"
+
+@interface orderListRootViewController ()
+
+@end
+
+@implementation orderListRootViewController
+
+
+-(void) viewWillAppear:(BOOL)animated
+{
+    
+}
+
+
+
+-(void)sendRequesr{
+
+
+}
+
+- (void)viewDidLoad {
+    _currentPage=1;
+    [super viewDidLoad];
+    __weak typeof(self) weSelf=self;
+    self.RefershBlock=^{
+        _currentPage=1;
+        weSelf.isRefersh=YES;
+        [weSelf sendRequesr];
+    };
+    [self setupFooter:self.tableview];
+    [self setupHeaderWithTableview:self.tableview];
+    [self CreateFlow];
+}
+
+
+
+-(void)footerRefresh{
+    if (_currentPage+1>_totlaPage) {
+        [self.view makeToast:@"亲，没有更多数据了" duration:1 position:@"center"];
+    }else{
+        _currentPage++;
+        [self sendRequesr];
+    }
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    
+}
+
+
+-(void)requestWithURL:(NSString*)url{
+    
+    [self flowShow];
+    if (!_dataArray) {
+        _dataArray=[[NSMutableArray alloc]init];
+    }
+    NSDictionary*dict=@{@"pageNo":[NSString stringWithFormat:@"%lu",_currentPage],@"pageSize":@"10"};
+    [[httpManager share]POST:url parameters:dict success:^(AFHTTPRequestOperation *Operation, id responseObject) {
+        
+        NSDictionary*dict=(NSDictionary*)responseObject;
+        
+        
+        
+        if ([[dict objectForKey:@"rspCode"] integerValue]==200) {
+            if (self.isRefersh) {
+                [_dataArray removeAllObjects];
+                                }
+            NSArray*array=[dict objectForKey:@"entities"];
+            _totlaPage=[[dict objectForKey:@"totalPage"] integerValue];
+            _totalCount=[[dict objectForKey:@"totalResults"] integerValue];
+            for (NSInteger i=0; i<array.count; i++) {
+                NSDictionary*inforDic=array[i];
+                billListModel*model=[[billListModel alloc]init];
+                [model setValuesForKeysWithDictionary:[inforDic objectForKey:@"masterOrder"]];
+                [_dataArray addObject:model];
+                }
+        }
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self flowHide];
+            [self.tableview reloadData];
+            [self.weakRefreshHeader endRefreshing];
+            [self.refreshFooter endRefreshing];
+            self.isRefersh=NO;
+        });
+    } failure:^(AFHTTPRequestOperation *Operation, NSError *error) {
+        [self flowHide];
+        [self.weakRefreshHeader endRefreshing];
+        [self.refreshFooter endRefreshing];
+
+    }];
+
+}
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    
+        return _dataArray.count;
+}
+
+
+-(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    billListTableViewCell*cell=[tableView dequeueReusableCellWithIdentifier:@"Cell"];
+    if (!cell) {
+        cell=[[[NSBundle mainBundle]loadNibNamed:@"billListTableViewCell" owner:nil options:nil] lastObject];
+    }
+    billListModel*model;
+    cell.selectionStyle=0;
+    model =_dataArray[indexPath.row];
+    cell.model=model;
+    [cell reloadData];
+    return cell;
+}
+
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    return 85;
+}
+
+@end

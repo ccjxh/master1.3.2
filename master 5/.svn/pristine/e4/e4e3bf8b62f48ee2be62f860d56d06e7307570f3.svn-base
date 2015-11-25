@@ -1,0 +1,84 @@
+PODS:
+  - AFNetworking (2.5.3):
+    - AFNetworking/NSURLConnection (= 2.5.3)
+    - AFNetworking/NSURLSession (= 2.5.3)
+    - AFNetworking/Reachability (= 2.5.3)
+    - AFNetworking/Security (= 2.5.3)
+    - AFNetworking/Serialization (= 2.5.3)
+    - AFNetworking/UIKit (= 2.5.3)
+  - AFNetworking/NSURLConnection (2.5.3):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/NSURLSession (2.5.3):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/Reachability (2.5.3)
+  - AFNetworking/Security (2.5.3)
+  - AFNetworking/Serialization (2.5.3)
+  - AFNetworking/UIKit (2.5.3):
+    - AFNetworking/NSURLConnection
+    - AFNetworking/NSURLSession
+  - ASIHTTPRequest (1.8.2):
+    - ASIHTTPRequest/ASIWebPageRequest (= 1.8.2)
+    - ASIHTTPRequest/CloudFiles (= 1.8.2)
+    - ASIHTTPRequest/Core (= 1.8.2)
+    - ASIHTTPRequest/S3 (= 1.8.2)
+  - ASIHTTPRequest/ASIWebPageRequest (1.8.2):
+    - ASIHTTPRequest/Core
+  - ASIHTTPRequest/CloudFiles (1.8.2):
+    - ASIHTTPRequest/Core
+  - ASIHTTPRequest/Core (1.8.2):
+    - Reachability
+  - ASIHTTPRequest/S3 (1.8.2):
+    - ASIHTTPRequest/Core
+  - CocoaSecurity (1.2.4)
+  - FMDB (2.5):
+    - FMDB/standard (= 2.5)
+  - FMDB/common (2.5)
+  - FMDB/standard (2.5):
+    - FMDB/common
+  - IQKeyboardManager (3.2.3)
+  - MBProgressHUD (0.9.1)
+  - MJRefresh (1.4.5)
+  - pop (1.0.7)
+  - Reachability (3.2)
+  - SDWebImage (3.7.2):
+    - SDWebImage/Core (= 3.7.2)
+  - SDWebImage-Category (1.4):
+    - SDWebImage
+  - SDWebImage-ProgressView (0.4.0):
+    - SDWebImage (~> 3.7.0)
+  - SDWebImage/Core (3.7.2)
+  - UIToast (0.0.1)
+
+DEPENDENCIES:
+  - AFNetworking (~> 2.5.3)
+  - ASIHTTPRequest (~> 1.8.2)
+  - CocoaSecurity (~> 1.2.4)
+  - FMDB (~> 2.5)
+  - IQKeyboardManager (~> 3.2.3)
+  - MBProgressHUD (~> 0.9.1)
+  - MJRefresh (~> 1.4.5)
+  - pop (~> 1.0)
+  - SDWebImage-Category (~> 1.4)
+  - SDWebImage-ProgressView (~> 0.4.0)
+  - UIToast (~> 0.0.1)
+
+SPEC CHECKSUMS:
+  AFNetworking: e1d86c2a96bb5d2e7408da36149806706ee122fe
+  ASIHTTPRequest: ec013992946676b7978dcbde6396d57312d21db4
+  CocoaSecurity: d288a6f87e0f363823d2cb83e753814a6944f71a
+  FMDB: 96e8f1bcc1329e269330f99770ad4285d9003e52
+  IQKeyboardManager: 6ca5c54e3776eb54af4c7caf515833f3cd761d59
+  MBProgressHUD: c47f2c166c126cf2ce36498d80f33e754d4e93ad
+  MJRefresh: 4b24394e577ea399fbc926e5b6072317aae2c152
+  pop: 628ffc631644601567ee8bfaaaea493ebd7d0923
+  Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
+  SDWebImage: 71b7cdc1d1721d6a82ed62889030225f2c249e29
+  SDWebImage-Category: 1f1c00880a538f7faf5b726e1559cf1ca555c553
+  SDWebImage-ProgressView: cdc29091ec0d53fd6dab3df65039a4f308e0a5ae
+  UIToast: 4db52a10f1aba938ad6b9d609f6a6e848702478f
+
+COCOAPODS: 0.35.0

@@ -1,0 +1,265 @@
+//
+//  selectViewController.m
+//  master
+//
+//  Created by jin on 15/5/18.
+//  Copyright (c) 2015年 JXH. All rights reserved.
+//
+
+#import "selectViewController.h"
+#import "headViewController.h"
+#import "cityViewController.h"
+#import "contractorViewController.h"
+#import "SDCycleScrollView.h"
+@interface selectViewController ()<UIScrollViewDelegate,SDCycleScrollViewDelegate>
+@property (weak, nonatomic) IBOutlet UIButton *head;
+@property (weak, nonatomic) IBOutlet UIButton *manager;
+@property(nonatomic)NSString*currentCityName;
+@end
+
+@implementation selectViewController
+
+-(void) viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+//    self.navigationController.navigationBar.barTintColor=[UIColor whiteColor];
+    
+}
+
+
+-(void)viewWillDisappear:(BOOL)animated{
+//    self.navigationController.navigationBar.barTintColor=COLOR(67, 172, 219, 1);
+
+}
+
+
+
+- (void)viewDidLoad {
+   
+    [super viewDidLoad];
+    [self requestPay];
+    [self setupMap];
+    [self request];
+    [self initUI];
+    [self createUI];
+    [self CreateFlow];
+    
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+
+
+//缓存支付
+-(void)requestPay{
+    
+    NSString*urlString=[self interfaceFromString:interface_moneyType];
+    [[httpManager share]GET:urlString parameters:nil success:^(AFHTTPRequestOperation *Operation, id responseObject) {
+        NSDictionary*dict=(NSDictionary*)responseObject;
+        
+        if ([[dict objectForKey:@"rspCode"] intValue]==200) {
+            NSArray*Array=[dict objectForKey:@"entities"];
+            for (NSInteger i=0; i<Array.count; i++) {
+                NSDictionary*inforDict=Array[i];
+                payModel*model=[[payModel alloc]init];
+                [model setValuesForKeysWithDictionary:[inforDict objectForKey:@"dataItem"]];
+                [[dataBase share]addPay:model];
+            }
+        }
+        
+    } failure:^(AFHTTPRequestOperation *Operation, NSError *error) {
+        
+    }];
+    
+}
+
+
+//包工头点击时间
+- (IBAction)headAction:(id)sender {
+    contractorViewController*cvc=[[contractorViewController alloc]init];
+    cvc.cityName=_currentCityName;
+    cvc.hidesBottomBarWhenPushed=YES;
+    [self pushWinthAnimation:self.navigationController Viewcontroller:cvc];
+}
+//项目经理点击时间
+- (IBAction)managerAction:(id)sender {
+    headViewController*hvc=[[headViewController alloc]init];
+    hvc.cityName=_currentCityName;
+    hvc.hidesBottomBarWhenPushed=YES;
+    [self pushWinthAnimation:self.navigationController Viewcontroller:hvc];
+}
+
+
+-(void)createUI{
+    self.view.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"back.jpg"]];
+    self.manager.backgroundColor=COLOR(180, 222, 250, 1);
+    self.head.alpha=0.8;
+    self.allbutton.layer.cornerRadius=5;
+    self.confirmButton.layer.cornerRadius=5;
+    self.recommend.layer.cornerRadius=5;
+    self.view.alpha=0.7;
+    NSArray*images=@[[UIImage imageNamed:@"1"],
+                            [UIImage imageNamed:@"2"],
+                            [UIImage imageNamed:@"3"],
+                            [UIImage imageNamed:@"4"]
+                            ];
+    SDCycleScrollView*sdvc=[SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(10, 74, SCREEN_WIDTH-20, 100) imagesGroup:images];
+    sdvc.layer.masksToBounds=YES;
+    sdvc.layer.cornerRadius=5;
+    sdvc.delegate=self;
+    [self.view addSubview:sdvc];
+    self.head.layer.cornerRadius=5;
+    self.manager.layer.cornerRadius=5;
+    NSArray*Array=@[@"项目经理",@"包工头"];
+    for (NSInteger i=0; i<2; i++) {
+        UILabel*label=[[UILabel alloc]initWithFrame:CGRectMake(self.head.frame.size.width/2-40, 55, 80, 20)];
+        label.text=Array[i];
+        label.textAlignment=NSTextAlignmentCenter;
+        label.textColor=[UIColor whiteColor];
+        label.font=[UIFont systemFontOfSize:16];
+        if (i==0) {
+            [self.manager addSubview:label];
+            UIImageView*imageview=[[UIImageView alloc]initWithFrame:CGRectMake(self.manager.frame.size.width/2-20, 10,40,40)];
+            imageview.image=[UIImage imageNamed:@"项目经理.png"];
+            imageview.userInteractionEnabled=YES;
+            [self.manager addSubview:imageview];
+        }else{
+            [self.head addSubview:label];
+            UIImageView*imageview=[[UIImageView alloc]initWithFrame:CGRectMake(self.head.frame.size.width/2-20, 10,40,40)];
+            imageview.image=[UIImage imageNamed:@"工头.png"];
+            [self.head addSubview:imageview];
+        }
+        
+        label.enabled=NO;
+    }
+}
+
+
+- (void)cycleScrollView:(SDCycleScrollView *)cycleScrollView didSelectItemAtIndex:(NSInteger)index
+{
+    NSLog(@"---点击了第%ld张图片", index);
+}
+
+
+-(void)initUI{
+    self.view.backgroundColor=COLOR(228, 228, 228, 1);
+    UIView*view=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 60, self.navigationController.navigationBar.frame.size.height)];
+    view.tag=21;
+    UIImageView*imageview=[[UIImageView alloc]initWithFrame:CGRectMake(5, 15, 15, 15)];
+    imageview.image=ImageNamed(@"ic_location_normal");
+    imageview.tag=11;
+    [view addSubview:imageview];
+    self.allbutton.hidden=YES;
+    self.confirmButton.hidden=YES;
+    self.recommend.hidden=YES;
+    UIButton*button=[[UIButton alloc]initWithFrame:CGRectMake(15, 10, 60, 30)];
+    button.titleLabel.font=[UIFont systemFontOfSize:12];
+    [button setTitle:_currentCityName forState:UIControlStateNormal];
+    button.tag=10;
+    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [button addTarget:self action:@selector(changecity) forControlEvents:UIControlEventTouchUpInside];
+    [view addSubview:button];
+    self.navigationItem.leftBarButtonItem=[[UIBarButtonItem alloc]initWithCustomView:view];
+}
+
+-(void)changecity
+{
+    cityViewController*cvc=[[cityViewController alloc]init];
+    cvc.TBlock=^(AreaModel*CityModel){
+        _currentCityName=CityModel.name;
+        [self initUI];
+    };
+    [self pushWinthAnimation:self.navigationController Viewcontroller:cvc];
+    
+}
+
+
+
+#pragma mark-网络数据请求
+-(void)request
+{
+    [self flowShow];
+    AreaModel*model3=[[dataBase share]findWithCity:_currentCityName];
+    NSArray*array=[[dataBase share]findWithPid:model3.id];
+    if (array.count==0) {
+        NSString*urlString=[self interfaceFromString:interface_resigionList];
+        [[httpManager share]GET:urlString parameters:nil success:^(AFHTTPRequestOperation *Operation, id responseObject) {
+            NSDictionary*dict=(NSDictionary*)responseObject;
+            NSArray*tempArray=[dict objectForKey:@"entities"];
+            NSMutableArray*valueArray=[[NSMutableArray alloc]init];
+            for (NSInteger i=0; i>tempArray.count; i++) {
+                NSDictionary*inforDict=tempArray[i];
+                AreaModel*cityModel=[[AreaModel alloc]init];
+                [cityModel setValuesForKeysWithDictionary:[inforDict objectForKey:@"dataCatalog"]];
+                [valueArray addObject:cityModel];
+            }
+            [[dataBase  share]addCityToDataBase:valueArray Pid:model3.id];
+            [self flowHide];
+        } failure:^(AFHTTPRequestOperation *Operation, NSError *error) {
+            
+            [self flowHide];
+            
+        }];
+    }
+}
+
+
+
+//地图相关设置
+
+-(void)setupMap{
+    
+    _mapManager=[[CLLocationManager alloc]init];
+    _geocoder=[[CLGeocoder alloc]init];
+    if (![CLLocationManager locationServicesEnabled]) {
+        [self.view makeToast:@"定位尚未打开，请检查设置" duration:1 position:@"center"];
+         _currentCityName=@"深圳市";
+    }else{
+        if ([CLLocationManager authorizationStatus]==kCLAuthorizationStatusNotDetermined){
+//            [_mapManager requestWhenInUseAuthorization];
+             _currentCityName=@"深圳市";
+        }else{
+            
+            _mapManager.delegate=self;
+            _mapManager.desiredAccuracy=kCLLocationAccuracyBest;
+            //定位频率,每隔多少米定位一次
+            CLLocationDistance distance=10.0;//十米定位一次
+            _mapManager.distanceFilter=distance;
+            //启动跟踪定位
+            [_mapManager startUpdatingLocation];
+        }
+        
+    }
+    
+}
+
+
+#pragma mark - CoreLocation 代理
+-(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations{
+    CLLocation *location=[locations firstObject];//取出第一个位置
+    CLLocationCoordinate2D coordinate=location.coordinate;//位置坐标
+//    NSLog(@"经度：%f,纬度：%f,海拔：%f,航向：%f,行走速度：%f",coordinate.longitude,coordinate.latitude,location.altitude,location.course,location.speed);
+    //    //如果不需要实时定位，使用完即使关闭定位服务
+    [_mapManager stopUpdatingLocation];
+    [self getAddressByLatitude:coordinate.latitude longitude:coordinate.longitude];
+}
+
+#pragma mark 根据坐标取得地名
+-(void)getAddressByLatitude:(CLLocationDegrees)latitude longitude:(CLLocationDegrees)longitude{
+    //反地理编码
+    CLLocation *location=[[CLLocation alloc]initWithLatitude:latitude longitude:longitude];
+    [_geocoder reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
+        CLPlacemark *placemark=[placemarks firstObject];
+        _currentCityName=[placemark.addressDictionary objectForKey:@"City"];
+        UIButton*view=(id)[self.view viewWithTag:21];
+        [view removeFromSuperview];
+        [self initUI];
+        //SubLocality  区
+    }];
+}
+
+
+@end

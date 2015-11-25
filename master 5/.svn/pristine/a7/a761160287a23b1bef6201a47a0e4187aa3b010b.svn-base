@@ -1,0 +1,78 @@
+//
+//  fourthTableViewCell.m
+//  master
+//
+//  Created by jin on 15/5/19.
+//  Copyright (c) 2015年 JXH. All rights reserved.
+//
+
+#import "fourthTableViewCell.h"
+
+@implementation fourthTableViewCell
+
+- (void)awakeFromNib {
+    [self initUI];
+}
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    [super setSelected:selected animated:animated];
+
+    // Configure the view for the selected state
+}
+
+
+-(void)initUI
+{
+    NSArray*array=@[@"不限",@"18-30",@"30-50",@"50以上"];
+    for (NSInteger i=0; i<4;i++) {
+        UIButton*button=[[UIButton alloc]initWithFrame:CGRectMake(10+i%3*((SCREEN_WIDTH-20-40)/3+20), 30+i/3*45, (SCREEN_WIDTH-20-40)/3, 35)];
+        button.backgroundColor=COLOR(249, 249, 249, 1);
+        button.titleLabel.font=[UIFont systemFontOfSize:14];
+        [button setTitle:array[i] forState:UIControlStateNormal];
+        [button setTitleColor:COLOR(108, 108, 108, 1) forState:UIControlStateNormal];
+        button.titleLabel.lineBreakMode=UILineBreakModeCharacterWrap;
+        [button addTarget:self action:@selector(onclick:) forControlEvents:UIControlEventTouchUpInside];
+        button.layer.cornerRadius=10;
+        button.tag=40+i;
+        [self addSubview:button];
+    }
+    
+}
+
+-(void)onclick:(UIButton*)button
+{
+    button.backgroundColor=COLOR(67, 172, 219, 1);
+    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    for (NSInteger i=0; i<4; i++) {
+        UIButton*tempButton=(id)[self viewWithTag:40+i];
+        if (button.tag==tempButton.tag) {
+            continue;
+        }
+        [tempButton setTitleColor:COLOR(108, 108, 108, 1) forState:UIControlStateNormal];
+        tempButton.backgroundColor=COLOR(249, 249, 249, 1);
+    }
+    if (button.tag==40) {
+        return;
+    }
+    if (_block) {
+        NSString*value;
+        switch (button.tag-40) {
+            case 1:
+                value=@"20-30";
+                break;
+                case 2:
+                value=@"30-50";
+                break;
+                case 3:
+                value=@"50-100";
+                break;
+            default:
+                break;
+        }
+        
+        
+        _block(value);
+    }
+}
+
+@end

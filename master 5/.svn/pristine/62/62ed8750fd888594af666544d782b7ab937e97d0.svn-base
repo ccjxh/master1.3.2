@@ -1,0 +1,25 @@
+//
+//  ChangeDateViewController.h
+//  ZBCloud
+//
+//  Created by Ky.storm on 14-9-23.
+//  Copyright (c) 2014年 ky.storm. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+typedef void (^BlockDateValue)(NSString *textField);
+
+@interface ChangeDateViewController : UIViewController
+@property (nonatomic, copy) NSString *oldDate;    //日期, 格式 yyyy-MM-dd
+
+@property (nonatomic,copy) BlockDateValue blockDateValue;
+@property (nonatomic,copy) NSString *navTitle;
+@property (nonatomic,copy) NSString *content;
+@property (nonatomic,assign) long tag;
+
+/*!
+ * @discussion 日期更改响应块
+ */
+- (void)changeDateWithBlock:(void(^)(NSString *newDate, BOOL succeed))block;
+@end

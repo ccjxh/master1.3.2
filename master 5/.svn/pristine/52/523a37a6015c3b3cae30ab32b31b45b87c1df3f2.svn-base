@@ -1,0 +1,746 @@
+//
+//  AppDelegate.m
+//  master
+//
+//  Created by jin on 15/5/5.
+//  Copyright (c) 2015年 JXH. All rights reserved.
+//
+
+#import "AppDelegate.h"
+#import "LoginViewController.h"
+#import "orderViewController.h"
+#import "selectViewController.h"
+#import "MyViewController.h"
+#import "XGPush.h"
+#import "XGSetting.h"
+#import "JKNotifier.h"
+#import "MNextOrderDetailViewController.h"
+#import <CoreLocation/CoreLocation.h>
+#import "myRecommendPeopleViewController.h"
+@interface AppDelegate ()<TencentSessionDelegate,WXApiDelegate>
+@property (nonatomic) CLLocationManager *locMgr;
+@property(nonatomic)BOOL havePushMessage;//是否有推送消息
+@property(nonatomic)NSDictionary*pushDictory;//推送字典
+@property(nonatomic)BOOL isLoginSuccess;//登陆是否成功
+@property(nonatomic)NSTimer*timer;
+@end
+/**
+ * 用户岗位(1--雇主,2--师傅，3--包工头，4--项目经理)
+ */
+@implementation AppDelegate
+
+
+-(void)dealloc{
+
+    [_timer invalidate];
+
+}
+
+
+
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
+    if (!_pictureArray) {
+        _pictureArray=[[NSMutableArray alloc]init];
+    }
+    
+    
+     [XGPush startApp:2200123145 appKey:@"IT2RW4D1E84M"];
+    
+    [self setupRootView];
+    
+   _pushDictory=[launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
+    if (_pushDictory) {
+        _havePushMessage=YES;
+    }
+   
+    
+    //注销之后需要再次注册前的准备
+//    void (^successCallback)(void) = ^(void){
+//        //如果变成需要注册状态
+//        if(![XGPush isUnRegisterStatus])
+//        {
+//            //iOS8注册push方法
+//#if __IPHONE_OS_VERSION_MAX_ALLOWED >= _IPHONE80_
+//            
+//            float sysVer = [[[UIDevice currentDevice] systemVersion] floatValue];
+//            if(sysVer < 8){
+//                [self registerPush];
+//            }
+//            else{
+//                [self registerPushForIOS8];
+//            }
+//#else
+//            //iOS8之前注册push方法
+//            //注册Push服务，注册后才能收到推送
+//            [self registerPush];
+//#endif
+//        }
+//    };
+//    [XGPush initForReregister:successCallback];
+//    
+//    //推送反馈(app不在前台运行时，点击推送激活时)
+//    [XGPush handleLaunching:launchOptions];
+//    
+//    //推送反馈回调版本示例
+//    void (^successBlock)(void) = ^(void){
+//        //成功之后的处理
+//        NSLog(@"[XGPush]handleLaunching's successBlock");
+//    };
+//    
+//    void (^errorBlock)(void) = ^(void){
+//        //失败之后的处理
+//        NSLog(@"[XGPush]handleLaunching's errorBlock");
+//    };
+//    
+//    //角标清0
+//    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+//    
+//    
+//    //清除所有通知(包含本地通知)
+//    //[[UIApplication sharedApplication] cancelAllLocalNotifications];
+//    //没有启动时点击回调
+//    [XGPush handleLaunching:launchOptions successCallback:successBlock errorCallback:errorBlock];
+
+    
+//    [self setupPushWithDictory];//推送相关设置
+    
+    [[dataBase share]CreateAllTables]; //创建数据库
+    
+    [self requestSkills];//缓存技能列表并缓存
+    
+    [self dataBase];//缓存城市
+    
+    [self setupBaiDuMap];//设置地图
+    
+    [WXApi registerApp:@"wxaa561e93e30b45ca"];//微信注册
+    
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    
+    self.window.backgroundColor = [UIColor whiteColor];
+    
+    [self setupADImage];
+    
+    [self.window makeKeyAndVisible];
+    
+   
+    return YES;
+}
+
+
+
+
+
+
+-(void)deafter{
+
+    if (_isLoginSuccess) {
+        [self setHomeView];
+    }else{
+        
+        [self setupLoginView];
+    }
+
+
+}
+
+//推送
+-(void)setupPushWithDictory {
+    
+    //注销之后需要再次注册前的准备
+    void (^successCallback)(void) = ^(void){
+        //如果变成需要注册状态
+        if(![XGPush isUnRegisterStatus])
+        {
+            //iOS8注册push方法
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= _IPHONE80_
+            
+            float sysVer = [[[UIDevice currentDevice] systemVersion] floatValue];
+            if(sysVer < 8){
+                [self resignNoticeation];
+            }
+            else{
+                [self registerPushForIOS8];
+            }
+#else
+            //iOS8之前注册push方法
+            //注册Push服务，注册后才能收到推送
+            [self resignNoticeation];
+#endif
+        }
+    };
+    [XGPush initForReregister:successCallback];
+    
+    //推送反馈回调版本示例
+    void (^successBlock)(void) = ^(void){
+        //成功之后的处理
+        NSLog(@"[XGPush]handleLaunching's successBlock");
+    };
+    
+    void (^errorBlock)(void) = ^(void){
+        //失败之后的处理
+        NSLog(@"[XGPush]handleLaunching's errorBlock");
+    };
+    
+    //角标清0
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+    //清除所有通知(包含本地通知)
+    //[[UIApplication sharedApplication] cancelAllLocalNotifications];
+    
+
+}
+
+
+//设置广告界面
+-(void)setupADImage{
+
+    UIImageView *niceView = [[UIImageView alloc] initWithFrame:CGRectMake(0,0, SCREEN_WIDTH, SCREEN_HEIGHT)];
+    niceView.image = [UIImage imageNamed:@"Default-568h@2x"];
+    niceView.tag=10;
+    //添加到场景
+    [self.window addSubview:niceView];
+    
+    //放到最顶层;
+    [self.window bringSubviewToFront:niceView];
+    
+    //开始设置动画;
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationDuration:2];
+    [UIView setAnimationTransition:UIViewAnimationTransitionNone forView:self.window cache:YES];
+    [UIView setAnimationDelegate:self];
+    //這裡還可以設置回調函數;
+    
+    [UIView setAnimationDidStopSelector:@selector(startupAnimationDone)];
+   
+    niceView.alpha = 0.99;
+    
+    [UIView commitAnimations];
+    
+}
+
+
+-(void)startupAnimationDone{
+   
+    if (_isLoginSuccess) {
+        [self setHomeView];
+    }else{
+        
+        [self setupLoginView];
+    }
+
+    UIImageView*imageview=(id)[self.window viewWithTag:10];
+    [imageview removeFromSuperview];
+}
+
+-(void)setupBaiDuMap{
+
+    _mapManager = [[BMKMapManager alloc]init];
+    // 如果要关注网络及授权验证事件，请设定     generalDelegate参数
+    BOOL ret = [_mapManager start:@"GK6ttaQ8hXmIyFRjafl9gGP2"  generalDelegate:nil];
+    if (!ret) {
+        
+    }
+
+}
+
+
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
+{
+    //CLLocation中存放的是一些经纬度, 速度等信息. 要获取地理位置需要转换做地理位置编码.
+    // 1.取出位置对象
+    CLLocation *loc = [locations firstObject];
+    
+//    NSLog(@"CLLocation----%@",loc);
+    
+    // 2.取出经纬度
+    CLLocationCoordinate2D coordinate = loc.coordinate;
+    
+    // 3.打印经纬度
+//    NSLog(@"didUpdateLocations------%f %f", coordinate.latitude, coordinate.longitude);
+    
+    // 停止定位(省电措施：只要不想用定位服务，就马上停止定位服务)
+    [manager stopUpdatingLocation];
+}
+
+
+-(void)removeAdImageView{
+
+    [UIView animateWithDuration:0.7f animations:^{
+        self.adimage.transform =CGAffineTransformScale(self.adimage.transform, 1.5, 1.6);
+    } completion:^(BOOL finished) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.03 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            self.window.rootViewController=_nc;
+            [self.adimage removeFromSuperview];
+         });
+    }];
+}
+
+
+-(void)setupRootView
+{
+    NSUserDefaults*users=[NSUserDefaults standardUserDefaults];
+    NSString*username=[users objectForKey:@"username"];
+    if (username) {
+        NSString*password=[users objectForKey:username];
+        if (password) {
+            [self startRequestWithUsername:username Password:password];
+        }else{
+        
+//            [self setupLoginView];
+            _isLoginSuccess=NO;
+        }
+    }else{
+//        [self setupLoginView];
+        _isLoginSuccess=NO;
+    }
+}
+
+
+
+-(void)setHomeView{
+    
+    selectViewController*hvc=[[selectViewController alloc]init];
+    hvc.title=@"首页";
+    UINavigationController*nc=[[UINavigationController alloc]initWithRootViewController:hvc];
+    nc.navigationBar.barTintColor=COLOR(67, 172, 219, 1);
+    nc.navigationBar.barStyle=1;
+    orderViewController*ovc=[[orderViewController alloc]initWithNibName:@"orderViewController" bundle:nil];
+    UINavigationController*nc1=[[UINavigationController alloc]initWithRootViewController:ovc];
+    nc1.navigationBar.barTintColor=COLOR(67, 172, 219, 1);
+    ovc.title=@"订单";
+    nc1.navigationBar.barStyle=1;
+    MyViewController*mvc=[[MyViewController alloc]init];
+    UINavigationController*nc2=[[UINavigationController alloc]initWithRootViewController:mvc];
+    nc2.navigationBar.barStyle=1;
+    nc2.navigationBar.barTintColor=COLOR(67, 172, 219, 1);
+    mvc.title=@"我";
+    UITabBarItem*item1=[[UITabBarItem alloc]initWithTitle:@"首页" image: [UIImage imageNamed:@"找师傅-未选中"] selectedImage: [UIImage imageNamed:@"找师傅-选中"]];
+    UITabBarItem*item2=[[UITabBarItem alloc]initWithTitle:@"订单" image: [UIImage imageNamed:@"订单-未选中"] selectedImage: [UIImage imageNamed:@"订单-选中"]];
+    UITabBarItem*item3=[[UITabBarItem alloc]initWithTitle:@"我的" image: [UIImage imageNamed:@"我的-未选中"] selectedImage: [UIImage imageNamed:@"我的-选中"]];
+    UITabBarController*cvc=[[UITabBarController alloc]init];
+    cvc.viewControllers=@[nc,nc1,nc2];
+    nc.tabBarItem=item1;
+    nc1.tabBarItem=item2;
+    nc2.tabBarItem=item3;
+    self.window.rootViewController=cvc;
+    if (_havePushMessage) {
+        NSString*str=[_pushDictory objectForKey:PUSHKEY];
+        NSArray*array=[str componentsSeparatedByString:@"\"type\":\""];
+        NSString*type=[array[1] componentsSeparatedByString:@"\"}"][0];
+        if ([type isEqualToString:@"masterOrderContact"]==YES||[type isEqualToString:@"masterOrderAccept"]==YES||[type isEqualToString:@"masterOrderReject"]==YES||[type isEqualToString:@"masterOrderFinish"]==YES||[type isEqualToString:@"masterOrderStop"]==YES||[type isEqualToString:@"masterOrderStop"]==YES) {
+            cvc.selectedIndex=1;
+            NSArray*sepArray=[str componentsSeparatedByString:@"\"entityId\":"];
+            NSString*ID=[sepArray[1] componentsSeparatedByString:@","][0];
+            MNextOrderDetailViewController*mvc=[[MNextOrderDetailViewController alloc]initWithNibName:@"orderDetailOrderViewController" bundle:nil];
+            mvc.id=[ID integerValue];
+            [nc1 pushViewController:mvc animated:NO];
+           
+        }else if ([type isEqualToString:@"personalPass"]==YES||[type isEqualToString:@"personalFail"]==YES||[type isEqualToString:@"masterPostPass"]==YES||[type isEqualToString:@"masterPostFail"]==YES||[type isEqualToString:@"foremanPostPass"]==YES||[type isEqualToString:@"foremanPostFail"]==YES||[type isEqualToString:@"managerPostPass"]==YES||[type isEqualToString:@"managerPostFail"]==YES){
+            
+        }else if ([type isEqualToString:@"requestRecommend"]==YES){
+            cvc.selectedIndex=2;
+            myRecommendPeopleViewController*rvc=[[myRecommendPeopleViewController alloc]initWithNibName:@"myRecommendPeopleViewController" bundle:nil];
+            rvc.hidesBottomBarWhenPushed=YES;
+            [nc2 pushViewController:rvc animated:NO];
+        }
+    }
+
+}
+
+
+-(void)setupLoginView{
+    LoginViewController*lvc=[[LoginViewController alloc]init];
+    self.nc=[[UINavigationController alloc]initWithRootViewController:lvc];
+    _nc.navigationBar.barStyle=1;
+    _nc.navigationBar.barTintColor=NAV_COLOR;
+    self.window.rootViewController=_nc;
+}
+
+
+
+-(void)startRequestWithUsername:(NSString*)username Password:(NSString*)password{
+    __weak typeof(self)weSelf=self;
+    NSString*urlString=[self interfaceFromString:interface_login];
+    NSDictionary*dict=@{@"mobile":username,@"password":password};
+    [[httpManager share]POST:urlString parameters:dict success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSDictionary*dict=(NSDictionary*)responseObject;
+        if ([[dict objectForKey:@"rspCode"] integerValue]==200) {
+            NSUserDefaults*users=[NSUserDefaults standardUserDefaults];
+            [users setObject:username forKey:@"username"];
+            [users setObject:password forKey:username];
+            [users synchronize];
+//            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            AppDelegate*delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+            [delegate requestInformation];
+            [delegate requestAdImage];
+                //延迟跳转
+//            [XGPush setTag:[[[dict objectForKey:@"entity"] objectForKey:@"user"] objectForKey:@"pullTag"]];
+             [XGPush setAccount:[[[dict objectForKey:@"entity"] objectForKey:@"user"] objectForKey:@"pullTag"]];
+            [delegate setupPushWithDictory];
+            
+            delegate.userPost=[[[[dict objectForKey:@"entity"] objectForKey:@"user"] objectForKey:@"userPost"] integerValue];
+            delegate.id=[[[[dict objectForKey:@"entity"] objectForKey:@"user"] objectForKey:@"id"] integerValue];
+//            [delegate setHomeView];
+            _isLoginSuccess=YES;
+            
+            
+//            });
+            
+        } else if ([[dict objectForKey:@"rspCode"] integerValue]==500) {
+           
+        }
+        
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+    }];
+}
+
+
+-(void) setLogout
+{
+    LoginViewController *ctl = [[LoginViewController alloc] init];
+    self.window.rootViewController = ctl;
+}
+
+
+//腾讯QQ分享
+-(void)setupQQShare{
+
+    TencentOAuth*tencentOAuth = [[TencentOAuth alloc] initWithAppId:@"1104650241" andDelegate:self];
+    
+}
+
+
+-(void)dataBase
+{
+    AreaModel*model=[[dataBase share]findWithCity:@"深圳市"];
+    if (model.indexLetter==nil) {
+        NSString*urlString=[self interfaceFromString: interface_cityList];
+        [[httpManager share]GET:urlString parameters:nil success:^(AFHTTPRequestOperation *Operation, id responseObject) {
+            NSDictionary*dict=(NSDictionary*)responseObject;
+            NSArray*array=[dict objectForKey:@"entities"] ;
+            [[dataBase share]addCityToDataBase:array Pid:200000];
+        } failure:^(AFHTTPRequestOperation *Operation, NSError *error) {
+            //                NSLog(@"%@",error);
+        }];
+    }
+}
+
+
+
+//技能筛选项请求
+-(void)requestSkills
+{
+    NSString*urlString=[self interfaceFromString:interface_skill];
+    [[httpManager share]GET:urlString parameters:nil success:^(AFHTTPRequestOperation *Operation, id responseObject) {
+        NSMutableArray*array =[self arrayFromJosn:responseObject Type:@"servicerSkills" Model:@"skillModel"];
+        for (NSInteger i=0; i<array.count; i++) {
+            skillModel*model=array[i];
+            [[dataBase share]addSkillModel:model];
+        }
+        
+    } failure:^(AFHTTPRequestOperation *Operation, NSError *error) {
+        
+    }];
+}
+
+
+//广告栏图片
+-(void)requestAdImage{
+    [_pictureArray removeAllObjects];
+    NSString*urlString=[self interfaceFromString:interface_banners];
+    [[httpManager manager]GET:urlString parameters:nil success:^(AFHTTPRequestOperation *Operation, id responseObject) {
+        NSDictionary*dict=(NSDictionary*)responseObject;
+        if ([[dict objectForKey:@"rspCode"] integerValue]==200) {
+            NSArray*Array=[dict objectForKey:@"entities"];
+            for (NSInteger i=0; i<Array.count; i++) {
+                NSDictionary*inforDic=Array[i];
+                NSString*url=[[inforDic objectForKey:@"advertising"] objectForKey:@"resource"];
+                NSString*temp=[NSString stringWithFormat:@"%@%@",changeURL,url];
+                
+                
+                [_pictureArray addObject:temp];
+            }
+        
+        }
+         [[NSNotificationCenter defaultCenter]postNotificationName:@"updateUI" object:nil userInfo:nil];
+    } failure:^(AFHTTPRequestOperation *Operation, NSError *error) {
+        
+        
+        
+    }];
+}
+
+
+
+
+
+//缓存个人信息
+-(void)requestInformation{
+    NSString *urlString = [self interfaceFromString:interface_personalDetail];
+    [[httpManager share]GET:urlString parameters:nil success:^(AFHTTPRequestOperation *Operation, id responseObject) {
+        NSDictionary *dict = (NSDictionary*)responseObject;
+        NSDictionary *entityDic = [dict objectForKey:@"entity"];
+        NSDictionary *userDic = [entityDic objectForKey:@"user"];
+        PersonalDetailModel*model=[[PersonalDetailModel alloc]init];
+        [model setValuesForKeysWithDictionary:userDic];
+        [[dataBase share]addInformationWithModel:model];
+         [[NSNotificationCenter defaultCenter]postNotificationName:@"updateUI" object:nil userInfo:nil];
+        } failure:^(AFHTTPRequestOperation *Operation, NSError *error) {
+        
+    }];
+}
+
+-(void)resignNoticeation{
+    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound)];
+}
+
+
+//- (void)registerPushForIOS8{
+//#if __IPHONE_OS_VERSION_MAX_ALLOWED >= _IPHONE80_
+//    
+//    //Types
+//    UIUserNotificationType types = UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
+//    
+//    //Actions
+//    UIMutableUserNotificationAction *acceptAction = [[UIMutableUserNotificationAction alloc] init];
+//    acceptAction.identifier = @"单据通知";
+//    acceptAction.title = @"进入";
+//    acceptAction.activationMode = UIUserNotificationActivationModeForeground;
+//    acceptAction.destructive = NO;
+//    acceptAction.authenticationRequired = NO;
+//    
+//    //Categories
+//    UIMutableUserNotificationCategory *inviteCategory = [[UIMutableUserNotificationCategory alloc] init];
+//    
+//    inviteCategory.identifier = @"INVITE_CATEGORY";
+//    
+//    [inviteCategory setActions:@[acceptAction] forContext:UIUserNotificationActionContextMinimal];
+//    
+//    [inviteCategory setActions:@[acceptAction] forContext:UIUserNotificationActionContextMinimal];
+//    
+//    NSSet *categories = [NSSet setWithObjects:inviteCategory, nil];
+//    
+//    
+//    UIUserNotificationSettings *mySettings = [UIUserNotificationSettings settingsForTypes:types categories:categories];
+//    
+//    [[UIApplication sharedApplication] registerUserNotificationSettings:mySettings];
+//    [[UIApplication sharedApplication] registerForRemoteNotifications];
+//    
+//    
+//#endif
+//}
+//
+
+//-(void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification{
+//    //notification是发送推送时传入的字典信息
+//    [XGPush localNotificationAtFrontEnd:notification userInfoKey:@"clockID" userInfoValue:@"myid"];
+//    
+//    //删除推送列表中的这一条
+//    [XGPush delLocalNotification:notification];
+//    //[XGPush delLocalNotification:@"clockID" userInfoValue:@"myid"];
+//    
+//    //清空推送列表
+//    //[XGPush clearLocalNotifications];
+//}
+
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= _IPHONE80_
+
+//注册UserNotification成功的回调
+- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings
+{
+    
+    
+    //用户已经允许接收以下类型的推送
+    //UIUserNotificationType allowedTypes = [notificationSettings types];
+    
+}
+
+//按钮点击事件回调
+- (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(NSDictionary *)userInfo completionHandler:(void (^)())completionHandler{
+    
+    NSString*str=[userInfo objectForKey:PUSHKEY];
+    NSArray*array=[str componentsSeparatedByString:@"\"type\":\""];
+    NSString*type=[array[1] componentsSeparatedByString:@"\"}"][0];
+    if ([type isEqualToString:@"masterOrderAccept"]==YES) {
+        NSArray*sepArray=[str componentsSeparatedByString:@"\"entityId\":"];
+        NSString*ID=[sepArray[1] componentsSeparatedByString:@","][0];
+//        [self.window.rootViewController]
+        //接受消息的处理
+        
+        
+        
+    }
+    
+    
+        if([identifier isEqualToString:@"ACCEPT_IDENTIFIER"]){
+            
+            
+//        NSLog(@"ACCEPT_IDENTIFIER is clicked");
+    }
+    
+    completionHandler();
+}
+
+#endif
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    //NSString * deviceTokenStr = [XGPush registerDevice:deviceToken];
+    
+    void (^successBlock)(void) = ^(void){
+        //成功之后的处理
+        NSLog(@"信鸽服务器接受注册成功");
+    };
+    
+    void (^errorBlock)(void) = ^(void){
+        //失败之后的处理
+        NSLog(@"信鸽服务器接受注册失败");
+    };
+    
+//    注册设备
+//    [[XGSetting getInstance] setChannel:@"appstore"];
+//    [[XGSetting getInstance] setGameServer:@"巨神峰"];
+
+    
+     [XGPush registerDevice:deviceToken successCallback:successBlock errorCallback:errorBlock];
+    
+  }
+
+//如果deviceToken获取不到会进入此事件
+- (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err {
+    NSString *str = [NSString stringWithFormat: @"Error: %@",err];
+    
+}
+
+
+
+
+- (void)application:(UIApplication*)application didReceiveRemoteNotification:(NSDictionary*)userInfo
+{
+      //推送反馈(app运行时)
+    [XGPush handleReceiveNotification:userInfo];
+    NSString*str=[userInfo objectForKey:PUSHKEY];
+    NSArray*array=[str componentsSeparatedByString:@"\"type\":\""];
+    NSString*type=[array[1] componentsSeparatedByString:@"\"}"][0];
+    if ([type isEqualToString:@"personalPass"]==YES||[type isEqualToString:@"personalFail"]==YES||[type isEqualToString:@"masterPostPass"]==YES||[type isEqualToString:@"masterPostFail"]==YES||[type isEqualToString:@"foremanPostPass"]==YES||[type isEqualToString:@"foremanPostFail"]==YES||[type isEqualToString:@"managerPostPass"]==YES||[type isEqualToString:@"managerPostFail"]==YES) {
+        AppDelegate*delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+        if ([type isEqualToString:@"foremanPostPass"]==YES) {
+            
+            //3是工头  4是项目经理
+            delegate.userPost=3;
+        }else if ([type isEqualToString:@"managerPostPass"]==YES){
+            delegate.userPost=4;
+        }
+        [delegate requestInformation];
+    }
+    NSString*content=[[userInfo objectForKey:@"aps"] objectForKey:@"alert"];
+    UILocalNotification *notification=[[UILocalNotification alloc] init];
+    if (notification!=nil) {
+        NSDate *now=[NSDate date];
+        notification.fireDate=[now dateByAddingTimeInterval:1];
+        notification.timeZone=[NSTimeZone defaultTimeZone];
+        notification.alertBody=content;
+        notification.soundName = @"default";
+        [notification setApplicationIconBadgeNumber:1];
+        [[UIApplication sharedApplication] scheduleLocalNotification:notification];
+    }
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"updateUI" object:nil userInfo:nil];
+}
+
+-(void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification{
+    [[UIApplication sharedApplication] cancelAllLocalNotifications];
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+    
+    if (application.applicationState == UIApplicationStateActive) {
+        [JKNotifier showNotifer:notification.alertBody];
+    }
+
+
+}
+
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation{
+    
+    return [WXApi handleOpenURL:url delegate:self];
+    return [TencentOAuth HandleOpenURL:url];
+    
+}
+
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url{
+    return [TencentOAuth HandleOpenURL:url];
+    return [WXApi handleOpenURL:url delegate:self];
+}
+
+
+- (void)applicationWillResignActive:(UIApplication *)application {
+    // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
+    // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+}
+
+- (void)applicationDidEnterBackground:(UIApplication *)application {
+    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
+    // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+}
+
+- (void)applicationWillEnterForeground:(UIApplication *)application {
+    // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+}
+
+- (void)applicationDidBecomeActive:(UIApplication *)application {
+    
+    
+    
+    
+    // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+}
+
+- (void)applicationWillTerminate:(UIApplication *)application {
+    // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+
+- (void)registerPushForIOS8{
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= _IPHONE80_
+    
+    //Types
+    UIUserNotificationType types = UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
+    
+    //Actions
+    UIMutableUserNotificationAction *acceptAction = [[UIMutableUserNotificationAction alloc] init];
+    
+    acceptAction.identifier = @"ACCEPT_IDENTIFIER";
+    acceptAction.title = @"Accept";
+    
+    acceptAction.activationMode = UIUserNotificationActivationModeForeground;
+    acceptAction.destructive = NO;
+    acceptAction.authenticationRequired = NO;
+    
+    //Categories
+    UIMutableUserNotificationCategory *inviteCategory = [[UIMutableUserNotificationCategory alloc] init];
+    
+    inviteCategory.identifier = @"INVITE_CATEGORY";
+    
+    [inviteCategory setActions:@[acceptAction] forContext:UIUserNotificationActionContextDefault];
+    
+    [inviteCategory setActions:@[acceptAction] forContext:UIUserNotificationActionContextMinimal];
+    
+    NSSet *categories = [NSSet setWithObjects:inviteCategory, nil];
+    
+    
+    UIUserNotificationSettings *mySettings = [UIUserNotificationSettings settingsForTypes:types categories:categories];
+    
+    [[UIApplication sharedApplication] registerUserNotificationSettings:mySettings];
+    
+    
+    [[UIApplication sharedApplication] registerForRemoteNotifications];
+#endif
+}
+
+- (void)registerPush{
+    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound)];
+}
+
+
+@end

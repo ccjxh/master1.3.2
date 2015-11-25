@@ -1,0 +1,137 @@
+//
+//  httpManager.m
+//  master
+//
+//  Created by jin on 15/5/6.
+//  Copyright (c) 2015年 JXH. All rights reserved.
+//
+
+#import "httpManager.h"
+
+@implementation httpManager
++(httpManager*)share
+{
+    static dispatch_once_t once;
+    static httpManager*manager;
+    dispatch_once(&once, ^{
+        if (!manager) {
+            manager=[[self alloc]initWithBaseURL:[NSURL URLWithString:changeURL]];
+        }
+    });
+
+    return manager;
+}
+
+-(instancetype)initWithBaseURL:(NSURL *)url
+{
+    if (self=[super initWithBaseURL:url]) {
+        self.requestSerializer.timeoutInterval=timeout;
+        
+    }
+    return self;
+
+}
+
+
+-(AFHTTPRequestOperation*)GET:(NSString *)URLString parameters:(id)parameters success:(void (^)(AFHTTPRequestOperation *Operation, id responseObject))success failure:(void (^)(AFHTTPRequestOperation *Operation, NSError *error))failure
+{
+    __block AFHTTPRequestOperation*finallyOperation;
+    BOOL isReachable = [[AFNetworkReachabilityManager sharedManager] isReachable];
+//    if (!isReachable) {
+//        NSError *error = [NSError errorWithDomain:@"网络异常" code:502 userInfo:nil];
+//        failure(operation,error);
+//    }
+//    else
+//    {
+        //网络通畅
+        NSError *error1 = [NSError errorWithDomain:@"请求参数不正确" code:500 userInfo:nil];
+    finallyOperation =[super GET:URLString parameters:parameters success:^(AFHTTPRequestOperation *operation1, id responseObject) {
+           NSDictionary*dict=(NSDictionary*)responseObject;
+           NSInteger rspcode=[[dict objectForKey:@"rspCode"] integerValue];
+           switch (rspcode) {
+               case 500:
+                   success(operation1,responseObject);
+                   break;
+                   case 200:
+                   success(operation1,responseObject);
+                   break;
+               default:
+                   success(operation1,responseObject);
+                   break;
+           }
+           
+       } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+          
+           NSError *error2 = [NSError errorWithDomain:@"网络异常" code:502 userInfo:nil];
+           failure(operation,error2);
+           
+       }];
+    
+    
+//    }
+    return finallyOperation;
+
+}
+
+-(AFHTTPRequestOperation*)POST:(NSString *)URLString parameters:(id)parameters success:(void (^)(AFHTTPRequestOperation *Operation, id responseObject))success failure:(void (^)(AFHTTPRequestOperation *Operation, NSError *error))failure
+{
+    __block AFHTTPRequestOperation*operation;
+    BOOL isReachable = [[AFNetworkReachabilityManager sharedManager] isReachable];
+//    if (!isReachable) {
+//        NSError *error = [NSError errorWithDomain:@"网络异常" code:502 userInfo:nil];
+//        failure(operation,error);
+//    }
+//
+//    else
+//    {
+        //网络通畅
+        NSError *error1 = [NSError errorWithDomain:@"请求参数不正确" code:500 userInfo:nil];
+    
+    
+   
+    
+    
+           [super POST:URLString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+               
+               
+               
+            NSDictionary*dict=(NSDictionary*)responseObject;
+               
+               
+            NSDictionary*inforDict=[dict objectForKey:@"response"];
+            
+            
+            
+            switch ([[dict objectForKey:@"rspCode"]integerValue]) {
+                case 500:
+                    
+                    success(operation,responseObject);
+                    break;
+                case 200:
+                    
+                    success(operation,responseObject);
+                    break;
+                default:
+                    success(operation,responseObject);
+                    break;
+            }
+            
+            
+            
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            
+            NSError *error2 = [NSError errorWithDomain:@"网络异常" code:502 userInfo:nil];
+            failure(operation,error2);
+            
+        }];
+        
+        
+//    }
+    return operation;
+
+
+
+}
+
+
+@end

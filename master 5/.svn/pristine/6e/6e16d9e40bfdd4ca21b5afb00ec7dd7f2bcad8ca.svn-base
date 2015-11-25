@@ -1,0 +1,193 @@
+//
+//  PayViewController.m
+//  master
+//
+//  Created by jin on 15/6/26.
+//  Copyright (c) 2015年 JXH. All rights reserved.
+//
+
+#import "PayViewController.h"
+
+@interface PayViewController ()<UITableViewDataSource,UITableViewDelegate>
+
+@end
+
+@implementation PayViewController
+{
+    NSMutableArray*_dataArray;
+    UITextField*_tx;
+    payModel*valueModel;
+}
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    [self initData];
+    [self CreateFlow];
+    // Do any additional setup after loading the view from its nib.
+}
+
+
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+-(void)initData{
+
+    if (!_dataArray) {
+        _dataArray=[[NSMutableArray alloc]init];
+    }
+    NSMutableArray*array=[[dataBase share]findAllPay];
+    for (NSInteger i=0; i<array.count; i++) {
+        payModel*model=array[i];
+        [_dataArray addObject:model];
+    }
+    
+    [self.tableview reloadData];
+}
+
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+
+    return _dataArray.count;
+    
+}
+
+
+-(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+
+    UITableViewCell*cell=[tableView dequeueReusableCellWithIdentifier:@"cell"];
+    if (!cell) {
+        cell=[[UITableViewCell alloc]initWithStyle:1 reuseIdentifier:@"cell"];
+    }
+    payModel*model=_dataArray[indexPath.row];
+    cell.textLabel.text=model.remark;
+    cell.textLabel.font=[UIFont systemFontOfSize:15];
+    cell.textLabel.textAlignment=NSTextAlignmentCenter;
+    return cell;
+}
+
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    valueModel=_dataArray[indexPath.row];
+    if ([valueModel.name isEqualToString:@"面议"]==YES) {
+        //面议处理时间
+        [self flowShow];
+        NSString*urlString=[self interfaceFromString:interface_updateExpectPay];
+        NSDictionary*dict=@{@"expectPay":@"0",@"payTypeId":[NSString stringWithFormat:@"%lu",valueModel.id]};
+        [[httpManager share]POST:urlString parameters:dict success:^(AFHTTPRequestOperation *Operation, id responseObject) {
+            NSDictionary*dict=(NSDictionary*)responseObject;
+            if ([[dict objectForKey:@"rspCode"] integerValue]==200) {
+                [self flowHide];
+                [self popWithnimation:self.navigationController];
+                if (_expectBlock) {
+                    _expectBlock();
+                }
+            }
+            
+        } failure:^(AFHTTPRequestOperation *Operation, NSError *error) {
+            [self flowHide];
+        }];
+        
+
+        
+    }else{
+        valueModel=_dataArray[indexPath.row];
+        [self createPay];
+    
+    
+    }
+
+
+}
+
+
+-(void)createPay{
+    UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 280, 130)];
+    CGRect welcomeLabelRect = contentView.bounds;
+    welcomeLabelRect.origin.y = 20;
+    welcomeLabelRect.size.height = 20;
+    UIFont *welcomeLabelFont = [UIFont boldSystemFontOfSize:17];
+    UILabel *welcomeLabel = [[UILabel alloc] initWithFrame:welcomeLabelRect];
+//    welcomeLabel.text = @"请输入期望薪资!";
+    welcomeLabel.font = welcomeLabelFont;
+    welcomeLabel.textColor = [UIColor whiteColor];
+    welcomeLabel.textAlignment = NSTextAlignmentCenter;
+    welcomeLabel.backgroundColor = [UIColor clearColor];
+    welcomeLabel.shadowColor = [UIColor blackColor];
+    welcomeLabel.shadowOffset = CGSizeMake(0, 1);
+    [contentView addSubview:welcomeLabel];
+    CGRect infoLabelRect = CGRectInset(contentView.bounds, 5, 5);
+    infoLabelRect.origin.y = CGRectGetMaxY(welcomeLabelRect)+5;
+    infoLabelRect.size.height -= CGRectGetMinY(infoLabelRect);
+    infoLabelRect.size.height-=40;
+    _tx=[[UITextField alloc]initWithFrame:infoLabelRect];
+    _tx.font=[UIFont systemFontOfSize:15];
+    _tx.placeholder=@"在这里输入金额";
+    _tx.frame=CGRectMake(_tx.frame.origin.x+50, _tx.frame.origin.y-20, _tx.frame.size.width-150, 35);
+    _tx.layer.borderColor=[[UIColor whiteColor]CGColor];
+    _tx.layer.borderWidth=1;
+    _tx.layer.cornerRadius=2;
+    _tx.textAlignment=NSTextAlignmentRight;
+    [_tx setValue:[UIColor whiteColor] forKeyPath:@"_placeholderLabel.textColor"];
+    _tx.backgroundColor=contentView.backgroundColor;
+    _tx.textColor=[UIColor whiteColor];
+    [contentView addSubview:_tx];
+    UILabel*label=[[UILabel alloc]initWithFrame:CGRectMake(_tx.frame.size.width+65, _tx.frame.origin.y, 80, 30)];
+    label.text=valueModel.name;
+    label.textColor=[UIColor whiteColor];
+    label.font=[UIFont systemFontOfSize:15];
+    [contentView addSubview:label];
+    UIButton*button=[[UIButton alloc]initWithFrame:CGRectMake(contentView.frame.size.width/2-40, _tx.frame.size.height+welcomeLabel.frame.size.height+25, 80, 30)];
+    button.backgroundColor=contentView.backgroundColor;
+    button.layer.borderColor=[[UIColor whiteColor]CGColor];
+    button.layer.borderWidth=1;
+    button.layer.cornerRadius=7;
+    [button setTitle:@"确定" forState:UIControlStateNormal];
+    button.titleLabel.font=[UIFont systemFontOfSize:15];
+    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [button addTarget:self action:@selector(confirm) forControlEvents:UIControlEventTouchUpInside];
+    [contentView addSubview:button];
+//    label.frame.origin.x= CGRectGetMaxY(infoLabelRect)+5;
+    [[KGModal sharedInstance]showWithContentView:contentView andAnimated:YES];
+}
+
+
+
+-(void)confirm{
+    
+    if (_tx.text.length==0) {
+        UIAlertView*alert=[[UIAlertView alloc]initWithTitle:@"操作提示" message:@"薪资不能为空" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+        [alert show];
+        return;
+    }
+    
+    if (![self isAllNum:_tx.text]) {
+        UIAlertView*alert=[[UIAlertView alloc]initWithTitle:@"操作提示" message:@"期望薪资不能是汉字" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+        [alert show];
+        return;
+    }
+    
+    [self flowShow];
+    NSString*urlString=[self interfaceFromString:interface_updateExpectPay];
+    NSDictionary*dict=@{@"expectPay":_tx.text,@"payTypeId":[NSString stringWithFormat:@"%lu",valueModel.id]};
+    [[httpManager share]POST:urlString parameters:dict success:^(AFHTTPRequestOperation *Operation, id responseObject) {
+        NSDictionary*dict=(NSDictionary*)responseObject;
+        if ([[dict objectForKey:@"rspCode"] integerValue]==200) {
+            [self flowHide];
+            [[KGModal sharedInstance]hideAnimated:YES withCompletionBlock:^{
+               
+                [self popWithnimation:self.navigationController];
+                if (_expectBlock) {
+                    _expectBlock();
+                }
+            }];
+            
+        }
+        
+    } failure:^(AFHTTPRequestOperation *Operation, NSError *error) {
+        [self flowHide];
+    }];
+}
+
+@end

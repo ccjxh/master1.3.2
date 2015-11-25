@@ -1,0 +1,106 @@
+//
+//  cityViewController.m
+//  master
+//
+//  Created by jin on 15/5/6.
+//  Copyright (c) 2015年 JXH. All rights reserved.
+//
+
+#import "cityViewController.h"
+
+@interface cityViewController ()<UITableViewDataSource,UITableViewDelegate>
+@property(nonatomic)NSMutableArray*dataArray;
+@property(nonatomic)NSInteger currentPage;
+@property (weak, nonatomic) IBOutlet UITableView *tableview;
+@property(nonatomic)NSArray*AZArray;
+@end
+
+@implementation cityViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    [self initData];
+    
+    // Do any additional setup after loading the view from its nib.
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+
+-(void)initData
+{
+    if (!_dataArray) {
+        _dataArray=[[NSMutableArray alloc]init];
+    }
+    [_dataArray removeAllObjects];
+    _AZArray=@[@"A",@"B",@"C",@"D",@"E",@"F",@"G",@"H",@"I",@"J",@"K",@"L",@"M",@"N",@"O",@"P",@"Q",@"R",@"S",@"T",@"U",@"V",@"W",@"X",@"Y",@"Z"];
+    for (NSInteger i=0; i<_AZArray.count; i++) {
+        NSString*char1=_AZArray[i];
+        NSMutableArray*array1=[[dataBase share]findWithFlag:char1];
+        [_dataArray addObject:array1];
+    }
+    [_tableview reloadData];
+}
+
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return _dataArray.count;
+
+}
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return [_dataArray[section] count];
+
+}
+
+-(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell*cell=[tableView dequeueReusableCellWithIdentifier:@"Cell"];
+    if (!cell) {
+        cell=[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"Cell"];
+        
+    }
+    AreaModel*model=_dataArray[indexPath.section][indexPath.row];
+    cell.textLabel.text=model.name;
+    cell.textLabel.font=[UIFont systemFontOfSize:16];
+    return cell;
+}
+-(NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    
+    return _AZArray[section];
+
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 50;
+    
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 30;
+}
+
+-(NSArray*)sectionIndexTitlesForTableView:(UITableView *)tableView
+{
+    return _AZArray;
+
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    AreaModel*model1=_dataArray[indexPath.section][indexPath.row];
+    if (self.TBlock) {
+    if (self.type==0) {
+        self.TBlock(model1);
+    [self popWithnimation:self.navigationController];
+    }
+  }
+}
+@end
