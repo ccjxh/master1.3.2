@@ -835,6 +835,7 @@
                     AreaModel*thirdModel=[[AreaModel alloc]init];
                     [thirdModel setValuesForKeysWithDictionary:childModel.children[z]];
                     BOOL isSuccess=  [db executeUpdate:sql,thirdModel.text,[NSString stringWithFormat:@"%lu",thirdModel.id],thirdModel.ucode,[NSString stringWithFormat:@"%lu",childModel.id]];
+                    NSLog(@"%@",isSuccess?@"成功":@"失败");
                     
                     if (isSuccess) {
                         [USER_DEFAULT setObject:@"1" forKey:@"data"];
@@ -846,6 +847,9 @@
         }
         [db commit];
         [db close];
+        
+        
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"stopFlow" object:nil];
         
     }];
     

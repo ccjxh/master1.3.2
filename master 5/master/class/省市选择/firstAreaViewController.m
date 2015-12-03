@@ -15,14 +15,32 @@
 
 @implementation firstAreaViewController
 
+
+-(void)dealloc{
+
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"stopFlow" object:nil];
+
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.automaticallyAdjustsScrollViewInsets=NO;
     self.title=@"省选择";
+     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(stopFlow) name:@"stopFlow" object:nil];
     [self initData];
     [self CreateFlow];
     [self request];
     // Do any additional setup after loading the view from its nib.
+}
+
+
+
+-(void)stopFlow{
+
+
+    [self flowHide];
+    [self request];
+
 }
 
 - (void)didReceiveMemoryWarning {
@@ -41,24 +59,20 @@
 -(void)request{
 
     [self flowShow];
-    NSString*urlString=[self interfaceFromString:interface_provinceList];
-    [[httpManager share]GET:urlString parameters:nil success:^(AFHTTPRequestOperation *Operation, id responseObject) {
-        NSDictionary*dict=(NSDictionary*)responseObject;
-        NSArray*entityArr=[dict objectForKey:@"entities" ];
-        for (NSInteger i=0; i<entityArr.count; i++) {
-            NSDictionary*inforDic=entityArr[i];
+    NSArray*array=[[dataBase share]findCityInformationWithPid:500000];
+    if (array.count==0) {
+        [self insertData];
+    }else{
+    
+        for (NSInteger i=0; i<array.count; i++) {
+            
             AreaModel*model=[[AreaModel alloc]init];
-            [model setValuesForKeysWithDictionary:[inforDic objectForKey:@"dataCatalog"]];
             [_dataArray addObject:model];
         }
-
-        [_tableview reloadData];
         [self flowHide];
-        
-    } failure:^(AFHTTPRequestOperation *Operation, NSError *error) {
-        [self flowHide];
-        
-    }];
+        [self.tableview reloadData];
+    }
+    
 }
 
 
@@ -154,10 +168,30 @@
     svc.model=_dataArray[indexPath.row];
     svc.serModel=self.model;
     AreaModel*model=_dataArray[indexPath.row];
-//    NSMutableArray*array=[[NSMutableArray alloc]initWithObjects:model, nil];
-//    [self.selectArray addObject:array];
     svc.selectArray=self.selectArray;
     [self pushWinthAnimation:self.navigationController Viewcontroller:svc];
 
 }
+
+
+
+-(void)insertData{
+    [self flowShow];
+    [USER_DEFAULT setObject:@"0" forKey:@"data"];
+    [USER_DEFAULT synchronize];
+    NSString*urlString=[self interfaceFromString:interface_allAddress];
+    [[httpManager share]GET:urlString parameters:nil success:^(AFHTTPRequestOperation *Operation, id responseObject) {
+        NSDictionary*dict=(NSDictionary*)responseObject;
+        if ([[dict objectForKey:@"rspCode"] integerValue]==200) {
+            NSArray*array=[dict objectForKey:@"entities"];
+            [[dataBase share]inserCity:array];
+        }else{
+            
+        }
+    } failure:^(AFHTTPRequestOperation *Operation, NSError *error) {
+        
+    }];
+    
+}
+
 @end

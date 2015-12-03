@@ -26,15 +26,30 @@
     UISearchDisplayController*_searchDisplay;
 
 }
+
+-(void)dealloc{
+
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"stopFlow" object:nil];
+}
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.automaticallyAdjustsScrollViewInsets=NO;
     self.title=@"省选择";
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(stopFlow) name:@"stopFlow" object:nil];
+    [self CreateFlow];
     [self initData];
     [self customNavigation];
 //    [self initUI];
-    [self CreateFlow];
     // Do any additional setup after loading the view from its nib.
+}
+
+
+-(void)stopFlow{
+
+    [self flowHide];
+    [self initData];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -81,12 +96,13 @@
 
 -(void)initData
 {
+         dispatch_async(dispatch_get_main_queue(), ^{
+
     if (!_dataArray) {
         _dataArray=[[NSMutableArray alloc]init];
     }
     [_dataArray removeAllObjects];
     _AZArray=@[@"定位",@"",@"A"];
-
     NSArray*temparray=@[@"定位"];
     NSArray*allCount=@[@"全国"];
     [_dataArray addObject:temparray];
@@ -95,9 +111,19 @@
     }
     for (NSInteger i=2; i<_AZArray.count; i++) {
         NSMutableArray*array1=[[dataBase share]findCityInformationWithPid:500000];
+        
+        if (array1.count==0) {
+            
+            [self insertData];
+            
+        }else{
+            
         [_dataArray addObject:array1];
+            
+        }
     }
     [_tableview reloadData];
+         });
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -496,6 +522,26 @@
 }
 
 
+-(void)insertData{
+    [self flowShow];
+//     dispatch_async(dispatch_get_main_queue(), ^{
+    [USER_DEFAULT setObject:@"0" forKey:@"data"];
+    [USER_DEFAULT synchronize];
+    NSString*urlString=[self interfaceFromString:interface_allAddress];
+    [[httpManager share]GET:urlString parameters:nil success:^(AFHTTPRequestOperation *Operation, id responseObject) {
+        NSDictionary*dict=(NSDictionary*)responseObject;
+        if ([[dict objectForKey:@"rspCode"] integerValue]==200) {
+            NSArray*array=[dict objectForKey:@"entities"];
+            [[dataBase share]inserCity:array];
+         }else{
+            
+        }
+    } failure:^(AFHTTPRequestOperation *Operation, NSError *error) {
+        
+    }];
+//     });
+    
+}
 
 
 

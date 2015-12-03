@@ -131,7 +131,7 @@
     [USER_DEFAULT synchronize];
     AppDelegate*delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
     [XGPush unRegisterDevice];
-    [XGPush startApp:2200123145 appKey:@"IT2RW4D1E84M"];  //信鸽推送初始化
+    [XGPush startApp:2200136520 appKey:@"I197YN27CXHD"];  //信鸽推送初始化
     LoginViewController*lvc=[[LoginViewController alloc]init];
     UINavigationController*nc=[[UINavigationController alloc]initWithRootViewController:lvc];
     nc.navigationBar.barStyle=1;

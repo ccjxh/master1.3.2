@@ -97,8 +97,6 @@
         logModel.userPost=@"3";
         [[loginManager share]requestPersonalInformation];
 
-        
-        
     }else if ([type isEqualToString:@"foremanPostFail"]==YES){
         logModel.userPost=@"3";
         [[loginManager share]requestPersonalInformation];
@@ -138,7 +136,6 @@
     [[httpManager share]POST:urlString parameters:dict success:^(AFHTTPRequestOperation *Operation, id responseObject) {
                     NSDictionary*dict=(NSDictionary*)responseObject;
                     if ([[dict objectForKey:@"rspCode"] integerValue]==200) {
-    
                         AppDelegate*delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
                         loginModel*logModel=[[dataBase share]findLoginInformationWithID:delegate.id];
                         logModel.integral=[[dict objectForKey:@"properties"] objectForKey:@"totalIntegral"];
@@ -152,6 +149,7 @@
     
                 } failure:^(AFHTTPRequestOperation *Operation, NSError *error) {
         }];
+    
     [[NSNotificationCenter defaultCenter]postNotificationName:@"public" object:nil userInfo:nil];
 }
 

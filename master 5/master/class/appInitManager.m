@@ -39,7 +39,7 @@
     
     [self setupServicePhone];
     
-    [XGPush startApp:2200123145 appKey:@"IT2RW4D1E84M"];  //信鸽推送初始化
+    [XGPush startApp:2200136520 appKey:@"I197YN27CXHD"];  //信鸽推送初始化
     
     [[CrashReporter sharedInstance] installWithAppId:@"900006644"];//bugly初始化
     
@@ -412,11 +412,7 @@
     
     [[httpManager share]GET:urlString parameters:nil success:^(AFHTTPRequestOperation *Operation, id responseObject) {
         NSDictionary*dict=(NSDictionary*)responseObject;
-        
-        
         if ([[dict objectForKey:@"rspCode"] integerValue]==200) {
-            
-            
             NSArray*array=[dict objectForKey:@"entities"];
             [[dataBase share]inserCity:array];
         }else{

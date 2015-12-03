@@ -465,7 +465,6 @@
 		3CCD2E881B95474E00BCA4F7 /* textFileTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CCD2E861B95474E00BCA4F7 /* textFileTableViewCell.m */; };
 		3CCD2E891B95474E00BCA4F7 /* textFileTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3CCD2E871B95474E00BCA4F7 /* textFileTableViewCell.xib */; };
 		3CCD2E8F1B95821000BCA4F7 /* myTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CCD2E8E1B95821000BCA4F7 /* myTabViewController.m */; };
-		3CCD2E981B95A57900BCA4F7 /* 工程案例.png in Resources */ = {isa = PBXBuildFile; fileRef = 3CCD2E941B95A57900BCA4F7 /* 工程案例.png */; };
 		3CCD2E9D1B95A87300BCA4F7 /* 导航栏.png in Resources */ = {isa = PBXBuildFile; fileRef = 3CCD2E9C1B95A87300BCA4F7 /* 导航栏.png */; };
 		3CCE2AC21B8EA7E800A0B49E /* myPublicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CCE2AC11B8EA7E800A0B49E /* myPublicViewController.m */; };
 		3CCE2AC71B8EA82500A0B49E /* mypublicListView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CCE2AC61B8EA82500A0B49E /* mypublicListView.m */; };
@@ -1417,7 +1416,6 @@
 		3CCD2E871B95474E00BCA4F7 /* textFileTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = textFileTableViewCell.xib; path = view/textFileTableViewCell.xib; sourceTree = "<group>"; };
 		3CCD2E8D1B95821000BCA4F7 /* myTabViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = myTabViewController.h; path = class/myTabViewController.h; sourceTree = "<group>"; };
 		3CCD2E8E1B95821000BCA4F7 /* myTabViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = myTabViewController.m; path = class/myTabViewController.m; sourceTree = "<group>"; };
-		3CCD2E941B95A57900BCA4F7 /* 工程案例.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "工程案例.png"; sourceTree = "<group>"; };
 		3CCD2E9C1B95A87300BCA4F7 /* 导航栏.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "导航栏.png"; sourceTree = "<group>"; };
 		3CCE2AC01B8EA7E800A0B49E /* myPublicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = myPublicViewController.h; path = "视图控制器/我的发布/myPublicViewController.h"; sourceTree = "<group>"; };
 		3CCE2AC11B8EA7E800A0B49E /* myPublicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = myPublicViewController.m; path = "视图控制器/我的发布/myPublicViewController.m"; sourceTree = "<group>"; };
@@ -3574,7 +3572,6 @@
 				3CD65AC71BC51955003B500C /* expandable_Image.png */,
 				3CD65AC81BC51955003B500C /* expandable_Image@2x.png */,
 				3CCD2E9C1B95A87300BCA4F7 /* 导航栏.png */,
-				3CCD2E941B95A57900BCA4F7 /* 工程案例.png */,
 			);
 			name = "小图标";
 			path = "图片/小图标";
@@ -4348,7 +4345,6 @@
 				3C881F581B7C3B9000C670B1 /* select.png in Resources */,
 				3CAA50921B7A04680063DD16 /* 9@2x.png in Resources */,
 				3C62C2611B0C2C8B00CD82A2 /* ic_compay.png in Resources */,
-				3CCD2E981B95A57900BCA4F7 /* 工程案例.png in Resources */,
 				3CBE7D9E1B1C4FB400D8CCDF /* introlduceChangeViewController.xib in Resources */,
 				3CD6E60A1BC7597A00402EB7 /* 我要分享-恢复的-恢复的.psd in Resources */,
 				3CE482611BFC954A007B52F1 /* sdRefeshView_arrow@2x.png in Resources */,
@@ -5322,8 +5318,8 @@
 			baseConfigurationReference = 2BF9F655D4D281E72F35E187 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

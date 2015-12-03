@@ -123,9 +123,11 @@
     return _separatorColor;
 }
 
+
 - (NSString *)titleForRowAtIndexPath:(DOPIndexPath *)indexPath {
        return [self.dataSource menu:self titleForRowAtIndexPath:indexPath];
 }
+
 
 - (void)selectDefalutIndexPath
 {
@@ -144,7 +146,6 @@
             [_delegate menu:self didSelectRowAtIndexPath:[DOPIndexPath indexPathWithCol:0 row:0]];
         }
     }
-    
 }
 
 #pragma mark - setter

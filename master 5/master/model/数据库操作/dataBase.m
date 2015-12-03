@@ -57,7 +57,7 @@
 
 -(void)inDeferredTransaction:(void (^)(FMDatabase *, BOOL *))block{
     
-//    [_queue inTransaction:<#^(FMDatabase *db, BOOL *rollback)block#>]
     [_queue inDeferredTransaction:block];
+    
 }
 @end
